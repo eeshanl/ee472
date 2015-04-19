@@ -24,6 +24,7 @@ __error__(char *pcFilename, unsigned long ulLine)
 int currentPos = 0;
 int selectPressed = 0;
 char* menu = "Main Menu:                            ";
+int playAgain = 1;
 //*****************************************************************************
 //
 //
@@ -50,61 +51,126 @@ main(void)
     
     // main loop
     while(TRUE) {
-      int sel = keymaster();     
-      char* options = options_creator();
-      char* menu0 = strcat*(menu, options[0]);
-      char* menu1 = strcat*(menu, options[1]);
-      char* menu2 = strcat*(menu, options[2]);
-      //if select option is pressed, main menu is displayed
-      if(sel == 5){
-        selectPressed = 1;  
-        display_init();
-        //when the user selects select, the main menu initially displays Easy
-        //char* menu = "Main Menu:                            1 : Easy\0";
-        //char* menu0 = strcat*(menu, options[0]);
-        display_string(menu0);
-      }
-      
-      //This scroll menu is like a state machine
-      //Here, currentPos refers to the "State" of the menu
-      //so, if Easy is displayed on the 2nd line, ==> currentPos = 0
-      // if Medium is displayed on the 2nd Line ==> currentPos = 1
-      // if Hard if displayed ==> currentPos = 2
-      //
-      //As we only want the user to use the up and down keys when
-      //the user has "chosen" to play the game, selectPressed flag needs
-      //to be checked
-      //
-      
-      if(selectPressed){
-        int pressed = keymaster();
-        if((pressed == 2) && (currentPos == 0)){
+        if(playAgain){
+          int sel = keymaster();     
+          char* options = options_creator();
+          char* menu0 = strcat*(menu, options[0]);
+          char* menu1 = strcat*(menu, options[1]);
+          char* menu2 = strcat*(menu, options[2]);
+          //if select option is pressed, main menu is displayed
+          if(sel == 5){
+            selectPressed = 1;  
             display_init();
-            display_string(menu1);
-            currentPos = 1;
-        }else if((pressed == 2) && (currentPos == 1)){
-            display_init();
-            display_string(menu2);
-            currentPos = 2;
-        }else if((pressed == 1) && (currentPos == 0)){
-            display_init();
-            display_string(menu2);
-            currentPos = 2;
-        }else if((pressed == 1) && (currentPos == 1)){
-            display_init();
+            //when the user selects select, the main menu initially displays Easy
+            //char* menu = "Main Menu:                            1 : Easy\0";
+            //char* menu0 = strcat*(menu, options[0]);
             display_string(menu0);
-            currentPos = 0;
-        }else if((pressed == 2) && (currentPos == 2)){
-            display_init();
-            display_string(menu0);
-            currentPos = 0;
-        }else if((pressed == 1) && (currentPos == 2)){
-            display_init();
-            display_string(menu1);
-            currentPos = 1;
         }
+      
+        //This scroll menu is like a state machine
+        //Here, currentPos refers to the "State" of the menu
+        //so, if Easy is displayed on the 2nd line, ==> currentPos = 0
+        // if Medium is displayed on the 2nd Line ==> currentPos = 1
+        // if Hard if displayed ==> currentPos = 2
+        //
+        //As we only want the user to use the up and down keys when
+        //the user has "chosen" to play the game, selectPressed flag needs
+        //to be checked
+        //
+      
+        if(selectPressed){
+            int pressed = keymaster();
+            if((pressed == 2) && (currentPos == 0)){
+                display_init();
+                display_string(menu1);
+                currentPos = 1;
+            }else if((pressed == 2) && (currentPos == 1)){
+                display_init();
+                display_string(menu2);
+                currentPos = 2;
+            }else if((pressed == 1) && (currentPos == 0)){
+                display_init();
+                display_string(menu2);
+                currentPos = 2;
+            }else if((pressed == 1) && (currentPos == 1)){
+                display_init();
+                display_string(menu0);
+                currentPos = 0;
+            }else if((pressed == 2) && (currentPos == 2)){
+                display_init();
+                display_string(menu0);
+                currentPos = 0;
+            }else if((pressed == 1) && (currentPos == 2)){
+                display_init();
+                display_string(menu1);
+                currentPos = 1;
+            }
+        }
+        
+        //now you need to call the different levels of the game according to which level has been chosen.
+        chooseLevel();
       }
       fresh_key();
+    }
+}
+
+//this method should help us choose what level the game should display, 
+//according to the user's preferences.
+void chooseLevel(){
+    int keyPressed = keymaster();
+    if((keyPressed == 5) && (currentPos == 0)){
+        startEasy();
+    }else if((keyPressed == 5) && (currentPos == 1)){
+        startMedium();
+    }else if((keyPressed == 5) && (currentPos == 2)){
+        startHard();
+    }
+}
+
+//method responsible for the easy game
+//user can only play the game till the score reaches 10
+int startEasy(){
+    int score = 0;
+    //display_init();
+    while(score < 10){
+        char combos[4];
+        int i;
+        //char* spaces = "    ";
+        for(i = 0; i < 4; i++){
+            display_init();
+            combos[i] = string_combos(); //displays the combo on the screen
+            display_string(combo[i]);
+            //wait for some time for the user to enter the answer
+            delay(300);
+            score = score + check_input(combos[i]);
+        }
+    }
+    RIT128x96x4StringDraw(score, 15, 44, 15);
+    display_init();
+    char* again = "Play Again?                              Press sel to go!\0";
+    display_string(again);
+    int ok = keymaster(); 
+    if(ok == 5){
+        playAgain = 1;
+    }else{
+        playAgain = 0;
+    }
+    return playAgain;
+}
+
+//updating the score every time user inputs something
+int check_input(char input){
+    int key = keymaster();
+    if((input == '^') && (key == 1)){
+        return 1;
+    }else if((input == 'v') && (key == 2)){
+        return 1;
+    }else if((input == '<') && (key == 3)){
+        return 1;
+    }else if((input == '>') && (key == 4)){
+        return 1;
+    }else{
+        return 0;
     }
 }
 
