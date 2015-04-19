@@ -1,4 +1,7 @@
 #include "header.h"
+//for the random number generator
+#include <stdlib.h>
+#include <time.h>
 
 void pulseE() {
   GPIO_PORTD_DATA_R ^= 0x20;
@@ -81,3 +84,24 @@ void display_string(char* g) { // Guess and Check all the way
     g++;
   }
 }
+
+//to create the array of different options available to display on the LCD for Level 1
+//just contains 6 options right now
+char* string_combos(){
+  srand( time(NULL) ); // hackish but gets the job done.
+  int x;
+  x = rand() % 6; // everytime it is different because the seed is different.
+  char* easyCombos[6] = {"<   >   ^   v   \0", 
+                          "^   v   v   ^   \0",
+                          "<   >   <   >   \0",
+                          "^   >   >   >   \0",
+                          "v   v   <   ^   \0",
+                          "<   >   v   v   \0"}; 
+  return easyCombos[x];                        
+}
+/* Possible options for randomizing:
+    srand( time(NULL) ); // hackish but gets the job done.
+    int x;
+    x = rand() % 6; // everytime it is different because the seed is different.
+    printf("%d", x);
+    */
