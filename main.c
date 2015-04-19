@@ -23,7 +23,8 @@ __error__(char *pcFilename, unsigned long ulLine)
 
 int currentPos = 0;
 int selectPressed = 0;
-char* menu = "Main Menu:                            ";
+char* menu = "Main Menu:     ";
+//checks if the user wants to play again
 int playAgain = 1;
 //*****************************************************************************
 //
@@ -51,7 +52,7 @@ main(void)
     
     // main loop
     while(TRUE) {
-        if(playAgain){
+        if(playAgain){ //priming the loop
           int sel = keymaster();     
           char* options = options_creator();
           char* menu0 = strcat*(menu, options[0]);
@@ -60,10 +61,8 @@ main(void)
           //if select option is pressed, main menu is displayed
           if(sel == 5){
             selectPressed = 1;  
+            //when the sel is the main menu displays the First option , Easy
             display_init();
-            //when the user selects select, the main menu initially displays Easy
-            //char* menu = "Main Menu:                            1 : Easy\0";
-            //char* menu0 = strcat*(menu, options[0]);
             display_string(menu0);
         }
       
@@ -81,6 +80,7 @@ main(void)
         if(selectPressed){
             int pressed = keymaster();
             if((pressed == 2) && (currentPos == 0)){
+                //need to reinitialize the display every time
                 display_init();
                 display_string(menu1);
                 currentPos = 1;
@@ -117,18 +117,27 @@ main(void)
 //this method should help us choose what level the game should display, 
 //according to the user's preferences.
 void chooseLevel(){
+    //find out what key was pressed and what the value of 
+    //currentPos was at the time it was pressed
+    //play the game needed accordingly
     int keyPressed = keymaster();
     if((keyPressed == 5) && (currentPos == 0)){
+        //easy game is started
         startEasy();
     }else if((keyPressed == 5) && (currentPos == 1)){
-        startMedium();
+        //TODO
+        //startMedium();
     }else if((keyPressed == 5) && (currentPos == 2)){
-        startHard();
+        //TODO
+        //startHard();
     }
 }
 
-//method responsible for the easy game
+//method plays the "Easy" version of DDR
 //user can only play the game till the score reaches 10
+//basically, this should display one char at a time,
+//and call another method, check_input, which decides
+//whether or not the score should be updated
 int startEasy(){
     int score = 0;
     //display_init();
@@ -142,10 +151,13 @@ int startEasy(){
             display_string(combo[i]);
             //wait for some time for the user to enter the answer
             delay(300);
+            //checks what the score is now
             score = score + check_input(combos[i]);
         }
     }
+    //displays the score on the OLED Display
     RIT128x96x4StringDraw(score, 15, 44, 15);
+    //display the new option of whether the user wants to play again
     display_init();
     char* again = "Play Again?                              Press sel to go!\0";
     display_string(again);
