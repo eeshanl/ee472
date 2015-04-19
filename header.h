@@ -18,5 +18,10 @@ void portBD_init();
 void display_write(int reset, char w);
 void display_string(char* g);
 void clear_display();
+char string_combos();
+void chooseLevel();
+int startEasy();
+char* options_creator();
+int check_input(char input);
 
 #endif
