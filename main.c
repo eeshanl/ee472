@@ -1,9 +1,7 @@
-// main
-
 #include "inc/hw_types.h"
 #include "driverlib/debug.h"
 #include "driverlib/sysctl.h"
-#include "drivers/rit128x96x4.h"
+
 #include "header.h"
 
 //*****************************************************************************
@@ -20,8 +18,6 @@ __error__(char *pcFilename, unsigned long ulLine)
 
 #define TRUE 1
 #define FALSE 0
-
-
 
 //*****************************************************************************
 //
@@ -43,14 +39,29 @@ main(void)
     LED_init();
     key_init();
     display_init();
-    
-    char* monk = "Let's Play DDR!                         Press sel to go!\0";
-    display_string(monk);
+    char* str = "Let's Play DDR!                         Press sel to go!\0";
+    display_string(str);
     
     // main loop
     while(TRUE) {
+      static int mainState = 0;
+      if (mainState == 0 && keymaster() == 5) { // select is pressed
+        clear_display();
+        str = "Main Menu:                              Easy\0";
+        display_string(str);
+        mainState = -1;
+      }
+      if (mainState != 0) {
+        mainMenu();
+      }
       
-      fresh_key();
+    
+      
+      
+//      if (keymaster()) {
+//        LED_toggle();
+//      }
+//      
     }
 }
 
