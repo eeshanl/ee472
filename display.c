@@ -2,7 +2,7 @@
 
 void pulseE() {
   GPIO_PORTD_DATA_R ^= 0x20;
-  delay(100);
+  delay(50);
   GPIO_PORTD_DATA_R ^= 0x20;
 }
 
@@ -60,22 +60,48 @@ void display_write(int reset, char w) {
   } else {
     GPIO_PORTD_DATA_R &=0x7F; // Turns only reset off
   }
-  delay(100);
+  delay(5);
   GPIO_PORTD_DATA_R ^= 0x20; // Flips enable
-  delay(50);
+  delay(5);
   GPIO_PORTB_DATA_R = w; // Set the char
-  delay(50);
+  delay(5);
   GPIO_PORTD_DATA_R ^= 0x20; // Unflips enable
   
 }
 
+
 void clear_display() {
-  GPIO_PORTB_DATA_R &= 0;
-  GPIO_PORTB_DATA_R |= 0x1;
+  GPIO_PORTB_DATA_R = 0x1;
+  GPIO_PORTD_DATA_R &= 0;
   pulseE();
 }
 
-void display_string(char* g) { // Guess and Check all the way
+void shiftRight() {
+  GPIO_PORTB_DATA_R = 0x1C;
+  GPIO_PORTD_DATA_R &= 0;
+  pulseE();
+}
+
+void cursorRight() {
+  pulseE();
+  GPIO_PORTB_DATA_R = 0x14;
+  GPIO_PORTD_DATA_R &= 0;
+  pulseE();
+}
+
+void cursorLeft() {
+  GPIO_PORTB_DATA_R = 0x10;
+  GPIO_PORTD_DATA_R &= 0;
+  pulseE();
+}
+
+void shiftLeft() {
+  GPIO_PORTB_DATA_R = 0x14;
+  GPIO_PORTD_DATA_R &= 0;
+  pulseE();
+}
+
+void display_string(char* g) {
   while (*g) {
     display_write(1, *g);
     g++;
