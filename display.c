@@ -54,7 +54,6 @@ void display_init(){
 }
 
 void display_write(int reset, char w) {
-  
   if (reset) {
     GPIO_PORTD_DATA_R |= 0x80; // turns only reset on
   } else {
@@ -66,7 +65,6 @@ void display_write(int reset, char w) {
   GPIO_PORTB_DATA_R = w; // Set the char
   delay(5);
   GPIO_PORTD_DATA_R ^= 0x20; // Unflips enable
-  
 }
 
 

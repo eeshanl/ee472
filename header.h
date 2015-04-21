@@ -1,5 +1,7 @@
 #include "inc/lm3s8962.h"
 #include "drivers/rit128x96x4.h"
+#include "stdlib.h"
+#include "time.h"
 
 #ifndef HEADER_H
 #define HEADER_H
@@ -29,5 +31,7 @@ void startGame(int level);
 int checkInput(char input, int key);
 char string_combos();
 void goToStateOne();
+void countDown();
+void  WinOrLose(int win, int score);
 
 #endif

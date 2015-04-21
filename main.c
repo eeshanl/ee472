@@ -6,7 +6,7 @@
 
 //*****************************************************************************
 //
-// The error routine that is called if the driver library encounters an error.
+// LETS PLAY DDR!!!
 //
 //*****************************************************************************
 #ifdef DEBUG

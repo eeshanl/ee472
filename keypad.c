@@ -13,14 +13,6 @@ void key_init() {
 }
 
 int fresh_key(){
-//   if(keymaster() && flag == 0){
-//        flag = 1;
-//        LED_toggle();
-//   }else if(keymaster() && flag){
-//        flag = 0;
-//        while(keymaster());
-//    }
-//  return flag;
   int key = getKey();
   if (lastKey == key) {
     return 0;
@@ -74,15 +66,6 @@ int getKey() {
 
 
 int keymaster() {
-//  while (fresh_key()) {
-//    if (debounce()) {
-//        return getKey();
-//    }
-//  }
-//  lastKey = 0;
-//  return 0;
-//
-  
   while (is_a_key()) {
     if (debounce()) {
       if (fresh_key()) {
@@ -92,16 +75,6 @@ int keymaster() {
   }
     lastKey = 0;
     return 0;
-
-  
-  
-//  if(is_a_key() && debounce() && fresh_key()) {
-//    return lastKey;
-//  }
-//  lastKey = 0;
-//  return 0;
-//  
-  
   
 }
 
