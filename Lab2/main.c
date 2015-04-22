@@ -55,13 +55,6 @@ main(void)
         mainMenu();
       }
       
-    
-      
-      
-//      if (keymaster()) {
-//        LED_toggle();
-//      }
-//      
     }
 }
 
