@@ -1,7 +1,11 @@
+//This file is responsible for the actions related to the key presses on the board
 #include "header.h"
 
+//global int that stores the value of the last key pressed
+//lastKey is initially set to 0, as no key is pressed in the beginning 
 int lastKey = 0;
 
+//post: initializes the keys on the board to their repective ports on the board
 void key_init() {
   SYSCTL_RCGC2_R |= 0x00000010;
   delay(100);
@@ -12,6 +16,10 @@ void key_init() {
   GPIO_PORTF_PUR_R |= 0x2;
 }
 
+//returns an int value that corresponds to a new instance of a key
+//press. The lastKey flag is used to help figure this out.
+//return value 1 ==> key is a fresh key
+//return value 0 ==> key is not a fresh key
 int fresh_key(){
   int key = getKey();
   if (lastKey == key) {
@@ -22,8 +30,11 @@ int fresh_key(){
   }
 }
 
+//post: returns whether the current data bit in the GPIO ports
+//      corresponds to a key
+//      1 ==> key
+//      0 ==> not a key
 int is_a_key() {
-  
   int bit1 = GPIO_PORTF_DATA_R & 0x2;
   if (GPIO_PORTE_DATA_R != 0xF || bit1 == 0) {
     return 1;
@@ -32,21 +43,23 @@ int is_a_key() {
   }
 }
 
+//post: returns an int value that corresponds to the value a key has been assigned 
+//      the assignment is as follows:
+//      return value 1 ==> up
+//      return value 2 ==> down
+//      return value 3 ==> left
+//      return value 4==> right
+//      return value 5 ==> select
+//      return value 0 ==> no key pressed
 int getKey() {
-  //assign int values to different keys
-  //1==> up
-  //2==> down
-  //3==>left
-  //4==>right
-  //5==>select
-  //0 if no key is pressed
-  
+  // sets the keys to their ports on the board
   int up = ~GPIO_PORTE_DATA_R & 0x1;
   int down = ~GPIO_PORTE_DATA_R & 0x2;
   int left = ~GPIO_PORTE_DATA_R & 0x4;
   int right = ~GPIO_PORTE_DATA_R & 0x8;
   int select = ~GPIO_PORTF_DATA_R & 0x2;
   
+  // checks which key is pressed and returns the int it corresponds to 
   if (up != 0) {
     return 1;
   } else if (down) {
@@ -60,11 +73,10 @@ int getKey() {
   } else {
     return 0;
   }
-    
 }
 
-
-
+//post: returns an int value of the key being pressed
+//      while 
 int keymaster() {
   while (is_a_key()) {
     if (debounce()) {
@@ -73,11 +85,11 @@ int keymaster() {
       }
     }
   }
-    lastKey = 0;
-    return 0;
-  
+  lastKey = 0;
+  return 0;
 }
 
+//post: returns an int value 
 int debounce() {
   int key = getKey();
   volatile unsigned long i = 0;
