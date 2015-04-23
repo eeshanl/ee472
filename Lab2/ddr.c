@@ -1,56 +1,78 @@
 #include "header.h"
 
-char* str = "";
+//state is a global int that represents the state, or the level the
+//game is in,
+//the states are as follows:
+//state = 1 ==> easy
+//state = 2 ==> medium
+//state = 3 ==> hard
 int state = 1;
 int gameTime = 0;
+char* str = "";
 
+//post: opens up a wrap around mainMenu for the game of ddr and
+//      prints it out on the LCD Screen. Allows the user
+//      to choose which level (easy, medium or hard) he/she
+//      wants to play.
+//      up and down keys are used to scroll through the menu
+//      once the user reaches an option he/she wants to play, 
+//      select (key == 5) is pressed for selection of the level
 void mainMenu() {
-  //state 1 is easy
-  // state 2 is medium
-  // state 3 is hard
-  
   int key = keymaster();
   if (gameTime == 0) {
     if (state == 1 && key == 4) {
-      clear_display();
+      // if game is on easy and down key (key == 4) is pressed
+      // change state to medium
+      clear_display(); //clear LCD to display new text
       state = 2;
       str = "Main Menu:                              Medium\0";
       display_string(str);
-    } else if (state == 1 && key == 3) {
+    } else if (state == 1 && key == 3) { 
+      // if the game is on easy and up key is pressed
+      // change state to hard
       clear_display();
       state = 3;
       str = "Main Menu:                              Hard\0";
       display_string(str);
     } else if (state == 2 && key == 4) {
+      // if the game is on medium and down key is pressed
+      // change state to hard
       clear_display();
       state = 3;
       str = "Main Menu:                              Hard\0";
       display_string(str);
     } else if (state == 2 && key == 3) {
+      // if the game is on medium and up key is pressed
+      // change state to easy
       clear_display();
       state = 1;
       str = "Main Menu:                              Easy\0";
       display_string(str);
     } else if (state == 3 && key == 4) {
+      // if the game is on hard and down key is pressed
+      // change state to easy
       clear_display();
       state = 1;
       str = "Main Menu:                              Easy\0";
       display_string(str);
     } else if (state == 3 && key == 3) {
+      // if the game is on hard and up key is pressed
+      // change state to medium
       clear_display();
       state = 2;
       str = "Main Menu:                              Medium\0";
       display_string(str);
     }
   }
+  // if the select key is selected, game is started.
   if (key == 5) {
-    gameTime = -1;
-    game(state);
-    goToStateOne();
+    gameTime = -1; //gameTime reset to -1
+    game(state); // game is chosen according to selected state
+    goToStateOne(); //Main Menu is displayed again, once the game is over
   }
-  
 }
 
+// Once the game is over, the scroll Main Menu is displayed again
 void goToStateOne() {
   state = 1;
   gameTime = 0;
@@ -60,14 +82,13 @@ void goToStateOne() {
   display_string(str);
 }
 
+//post: executes an instance of the game of DDR to be played according to the level chosen
 void game(int level) {
-  clear_display();
-  
-  startGame(level);
+  clear_display(); //clears the LCD Display according to display a new game of DDR
+  startGame(level); //starts the DDR display for the game, after clearing the display
 }
 
-
-
+//
 void startGame(int level) {
   int speed = 0;
   if (level == 1) {
@@ -165,7 +186,7 @@ void countDown() {
   }
 }
 
-
+// post: Displays a message to the user 
 void  WinOrLose(int win, int score) {
   clear_display();
   char point[4];
