@@ -104,8 +104,7 @@ void startGame(int level) {
     speed = 75000;
   }
   
-  //flag to determine whether the user won the game
-  int win = 1;
+
   //flag to determine whether the user wants to play again
   int playAgain = 1;
   
@@ -115,12 +114,14 @@ void startGame(int level) {
     countDown();
     //array that helps "randomize" the sequence of the arrows displayed for the game
     //on the LCD screen
-    int rNums[] = {3,2,1,3,1,2,4,2,1,3,1,3,4,1,2,4,3,2,3,4,2,1,3,4,2,1,3,4,2,1,3,4,3,2,1};
+    int rNums[] = {3,2,1,3,1,2,4,2,1};
     int length = sizeof(rNums) / sizeof(rNums[0]);
     volatile int score = 0;
+    //flag to determine whether the user won the game
+    int win = 1;
     //r holds the random number
     volatile int r;
-    int i = 1;
+    int i = 0;
     //display the characters till the score = 9
     //the user wins the game when the score is 9
     while(i < length && score < 9) {
@@ -157,17 +158,13 @@ void startGame(int level) {
         score++;
       }
       
-      if (i >= length) {
-        i = 0;
-      } else {
         i++;
-      }
-      
+
       //break out of the loop if wrong guess is made
       //by setting i to a high value
       if (scoreUpdate == 0) {
         win = 0;
-        i = 99;
+        i = length;
       }
       
     }
