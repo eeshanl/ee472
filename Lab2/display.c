@@ -6,6 +6,7 @@ void pulseE() {
   GPIO_PORTD_DATA_R ^= 0x20;
 }
 
+//SET UP ACCORDING TO 
 //post: initializes all the ports on the board
 //      the 8 Data Bits (DB 7 - DB 0) 
 //      
