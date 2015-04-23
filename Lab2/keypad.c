@@ -75,10 +75,9 @@ int getKey() {
   }
 }
 
-//post: returns an int value of the key being pressed
-//      while 
+//post: returns an int value of the key being pressed 
 int keymaster() {
-  while (is_a_key()) {
+  while (is_a_key()) { //checks for valid key
     if (debounce()) {
       if (fresh_key()) {
         return lastKey;
@@ -89,7 +88,8 @@ int keymaster() {
   return 0;
 }
 
-//post: returns an int value 
+//post: returns an int value that determines whether or not 
+//      the key has been pressed or not 
 int debounce() {
   int key = getKey();
   volatile unsigned long i = 0;
