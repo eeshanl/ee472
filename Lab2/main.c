@@ -33,31 +33,31 @@ __error__(char *pcFilename, unsigned long ulLine)
 int
 main(void)
 {
-    // Set the clocking to run directly from the crystal.
-    SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
-                   SYSCTL_XTAL_8MHZ);
+  // Set the clocking to run directly from the crystal.
+  SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
+  SYSCTL_XTAL_8MHZ);
 
 
-    RIT128x96x4Init(1000000); // Initialize the OLED display.
-    LED_init(); // Initializes the LED on the board
-    key_init(); // Initializes all keys on the board. Up, Down, Left, Right, Select
-    display_init(); // Initializes the LCD Display
-    char* str = "Let's Play DDR!                         Press sel to go!\0";
-    display_string(str); // prints out the initial message
+  RIT128x96x4Init(1000000); // Initialize the OLED display.
+  LED_init(); // Initializes the LED on the board
+  key_init(); // Initializes all keys on the board. Up, Down, Left, Right, Select
+  display_init(); // Initializes the LCD Display
+  char* str = "Let's Play DDR!                         Press sel to go!\0";
+  display_string(str); // prints out the initial message
 
-    // main loop
-    while(TRUE) {
-      static int mainState = 0; // main state representing the easy screen of the main menu
-      if (mainState == 0 && keymaster() == 5) { // select is pressed
-        clear_display();
-        str = "Main Menu:                              Easy\0";
-        display_string(str);
-        mainState = -1; // changes mainState to -1 so that after this time the mainMenu can be initiated
-      }
-      if (mainState != 0) {
-        mainMenu(); // starts the main menu
-      }
+  // main loop
+  while(TRUE) {
+    static int mainState = 0; // main state representing the easy screen of the main menu
+    if (mainState == 0 && keymaster() == 5) { // select is pressed
+      clear_display();
+      str = "Main Menu:                              Easy\0";
+      display_string(str);
+      mainState = -1; // changes mainState to -1 so that after this time the mainMenu can be initiated
     }
+    if (mainState != 0) {
+      mainMenu(); // starts the main menu
+    }
+  }
 }
 
 // Initializes the LED on the board to its repective port on the board.
@@ -80,14 +80,14 @@ void LED_toggle() {
 // post: causes a software delay
 void delay(unsigned long aValue)
 {
-    volatile unsigned long i = 0;
+  volatile unsigned long i = 0;
 
-    volatile unsigned int j = 0;
+  volatile unsigned int j = 0;
 
-    for (i = aValue; i > 0; i--)
-    {
-        for (j = 0; j < 100; j++);
+  for (i = aValue; i > 0; i--)
+  {
+    for (j = 0; j < 100; j++);
     }
 
-    return;
+  return;
 }
