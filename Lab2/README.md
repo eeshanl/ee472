@@ -2,6 +2,17 @@
 
 Created a [DDR Game](http://en.wikipedia.org/wiki/Dance_Dance_Revolution)  and menu on the LCD Display using the LMS3962 Micro-controller. A player has multiple difficulties (Easy, Medium, Hard) to choose from in the main menu of the game. DDR is a game that allows the player to choose the corresponding arrow sequence as they appear on the screen. We made a simple adaptation of this game on the LCD display. A new arrow appears on the screen as a certain amount of time elapses (varies with difficulty). Within that time period, the player must press the corresponding arrow key, if they press an incorrect key or do not press the arrow fast enough, they lose the game. To win the game, the player must reach 9 points. After the game is over, the display shows whether the player won or lost as well as there score out of 9. It then prompts the user if they want to play the game again or not.
 
+## Lab Objectives
+
+1. Introduce formal specifications
+2. Learn how to set up and use the GPIO pins of a micro-controller.
+3. Write functions that get and debounce simple key presses.
+4. Wire the connection between GPIO and an LCD display.
+5. Develop a function that satisfies the timing requirements. of an LCD display.
+6. Create a suite of functions that allow software interaction with an LCD display.
+7. Develop the infrastructure to allow key presses to interact with the display.
+8. Create a full user interface that adheres to specifications.
+
 ## Group Members & Contributions
 
 ### Eeshan Londhe
