@@ -78,25 +78,25 @@ int getKey() {
 //post: returns an int value of the key being pressed 
 int keymaster() {
   while (is_a_key()) { //checks for valid key
-    if (debounce()) {
-      if (fresh_key()) {
+    if (debounce()) { //checks if the same key is being pressed for 100 miliseconds 
+      if (fresh_key()) { //if the key has not been pressed before
         return lastKey;
       }
     }
   }
-  lastKey = 0;
+  lastKey = 0; //need to reset the lastKey to 0, if no key was pressed
   return 0;
 }
 
-//post: returns an int value that determines whether or not 
-//      the key has been pressed or not 
+//post: returns an int value that represents true or false (1 or 0) that determines 
+//whether or not the same key value is being read coninously for 100 milliseconds 
 int debounce() {
   int key = getKey();
   volatile unsigned long i = 0;
   volatile unsigned int j = 0;
   for (i = 10; i > 0; i--) {
     for (j = 0; j < 100; j++) {
-      if (key != getKey()) {
+      if (key != getKey()) { //if the key is not the same as the previous one
         return 0;
       }
     }
