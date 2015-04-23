@@ -57,6 +57,13 @@ main(void)
     if (mainState != 0) {
       mainMenu(); // starts the main menu
     }
+
+    /*
+    if (keymaster()) {
+      LED_toggle();
+    }
+    */
+
   }
 }
 
