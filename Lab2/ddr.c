@@ -88,8 +88,13 @@ void game(int level) {
   startGame(level); //starts the DDR display for the game, after clearing the display
 }
 
-//
+//pre: takes in the level of the game the user wants to play 
 void startGame(int level) {
+  //changes the speed of the game according to the level of difficulty the
+  //user chooses to play
+  //easy ==> speed = 250000
+  //medium ==> speed = 100000
+  //hard ==> speed = 75000
   int speed = 0;
   if (level == 1) {
     speed = 250000;
@@ -98,16 +103,26 @@ void startGame(int level) {
   } else {
     speed = 75000;
   }
+  
+  //flag to determine whether the user won the game
   int win = 1;
+  //flag to determine whether the user wants to play again
   int playAgain = 1;
   
-  while (playAgain) {
+  //loops till the user wants to play again
+  while (playAgain) { //playAgain set to 1 to prime the loop
+    //starts countDown for the game to begin
     countDown();
+    //array that helps "randomize" the sequence of the arrows displayed for the game
+    //on the LCD screen
     int rNums[] = {3,2,1,3,1,2,4,2,1,3,1,3,4,1,2,4,3,2,3,4,2,1,3,4,2,1,3,4,2,1,3,4,3,2,1};
     int length = sizeof(rNums) / sizeof(rNums[0]);
     volatile int score = 0;
+    //r holds the random number
     volatile int r;
     int i = 1;
+    //display the characters till the score = 9
+    //the user wins the game when the score is 9
     while(i < length && score < 9) {
       r = rNums[i];
       clear_display();
@@ -121,10 +136,12 @@ void startGame(int level) {
         display_string(">");
       }
       volatile unsigned long j = 0;
+      //scoreUpdate keeps track of whether the key needs to be updated or not
       int scoreUpdate = 0;
       
       while(j < speed) {
         int key = keymaster();
+        //if the correct key is pressed, the score needs to be updated
         if (r == key) {
           j = speed;
           scoreUpdate = 1;
@@ -135,6 +152,7 @@ void startGame(int level) {
         j++;
       }
       
+      //update score if scoreUpdate = 1
       if (scoreUpdate != 0) {
         score++;
       }
@@ -144,6 +162,9 @@ void startGame(int level) {
       } else {
         i++;
       }
+      
+      //break out of the loop if wrong guess is made
+      //by setting i to a high value
       if (scoreUpdate == 0) {
         win = 0;
         i = 99;
@@ -168,6 +189,8 @@ void startGame(int level) {
   }
 }
 
+//post: executes the countDown that is displayed on the LCD screen
+//      before every new game the user chooses to play
 void countDown() {
   clear_display();
   char* str;
@@ -175,13 +198,14 @@ void countDown() {
   display_string(str);
   delay(8000);
   for (int i = 5; i > 0; i--) {
-    //clear_display();
     char count[2];
     count[0] = i + '0';
     count[1] = '\0';
     display_string(count);
-    
+    //delay so user can read the message displayed on the screen
     delay(8000);
+    //shifts the cursor back to the left so it can override the 
+    //number just written on the Screen
     cursorLeft();
   }
 }
