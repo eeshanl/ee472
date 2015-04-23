@@ -1,8 +1,10 @@
-//This file is responsible for the actions related to the key presses on the board
 #include "header.h"
 
-//global int that stores the value of the last key pressed
-//lastKey is initially set to 0, as no key is pressed in the beginning 
+/* This file is responsible for the actions related to the key presses on the board */
+
+
+// global int that stores the value of the last key pressed
+// lastKey is initially set to 0, as no key is pressed in the beginning
 int lastKey = 0;
 
 //post: initializes the keys on the board to their repective ports on the board
@@ -43,7 +45,7 @@ int is_a_key() {
   }
 }
 
-//post: returns an int value that corresponds to the value a key has been assigned 
+//post: returns an int value that corresponds to the value a key has been assigned
 //      the assignment is as follows:
 //      return value 1 ==> up
 //      return value 2 ==> down
@@ -58,8 +60,8 @@ int getKey() {
   int left = ~GPIO_PORTE_DATA_R & 0x4;
   int right = ~GPIO_PORTE_DATA_R & 0x8;
   int select = ~GPIO_PORTF_DATA_R & 0x2;
-  
-  // checks which key is pressed and returns the int it corresponds to 
+
+  // checks which key is pressed and returns the int it corresponds to
   if (up != 0) {
     return 1;
   } else if (down) {
@@ -75,10 +77,10 @@ int getKey() {
   }
 }
 
-//post: returns an int value of the key being pressed 
+//post: returns an int value of the key being pressed
 int keymaster() {
   while (is_a_key()) { //checks for valid key
-    if (debounce()) { //checks if the same key is being pressed for 100 miliseconds 
+    if (debounce()) { //checks if the same key is being pressed for 100 miliseconds
       if (fresh_key()) { //if the key has not been pressed before
         return lastKey;
       }
@@ -88,8 +90,8 @@ int keymaster() {
   return 0;
 }
 
-//post: returns an int value that represents true or false (1 or 0) that determines 
-//whether or not the same key value is being read coninously for 100 milliseconds 
+//post: returns an int value that represents true or false (1 or 0) that determines
+//whether or not the same key value is being read coninously for roughly 100 milliseconds
 int debounce() {
   int key = getKey();
   volatile unsigned long i = 0;

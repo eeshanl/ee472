@@ -1,3 +1,5 @@
+// header file containing prototype of all used methods
+
 #include "inc/lm3s8962.h"
 #include "drivers/rit128x96x4.h"
 #include "stdlib.h"
@@ -32,6 +34,6 @@ int checkInput(char input, int key);
 char string_combos();
 void goToStateOne();
 void countDown();
-void  WinOrLose(int win, int score);
+void WinOrLose(int win, int score);
 
 #endif

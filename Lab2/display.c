@@ -1,15 +1,19 @@
 #include "header.h"
 
+/* This file contains all functions related to the LCD Display */
+
+
+// Pulses the enable bit on and off
 void pulseE() {
   GPIO_PORTD_DATA_R ^= 0x20;
   delay(50);
   GPIO_PORTD_DATA_R ^= 0x20;
 }
 
-//SET UP ACCORDING TO 
-//post: initializes all the ports on the board
-//      the 8 Data Bits (DB 7 - DB 0) 
-//      
+//SET UP ACCORDING TO
+//post: initializes all the ports on the board that were needed, specifically Port B & D
+//      the 8 Data Bits (DB 7 - DB 0)
+//
 void portBD_init() {
   SYSCTL_RCGC2_R |= 0xA;
   delay(100);
@@ -23,22 +27,23 @@ void portBD_init() {
   GPIO_PORTD_DEN_R |= 0xE0;
 }
 
-//post: initializes the display on the LCD Screen to enable 
-//      writing to the display
+//post: initializes the display on the LCD Screen to enable
+//      writing to the display. Also enables a cursor that flashes to indicate
+//      where the next string will be written at
 void display_init(){
   portBD_init();
   pulseE();
- 
-  GPIO_PORTB_DATA_R |= 0x30;
-  pulseE();
-  
-  GPIO_PORTB_DATA_R |= 0x30;
-  pulseE();
-  
+
   GPIO_PORTB_DATA_R |= 0x30;
   pulseE();
 
-  GPIO_PORTB_DATA_R |= 0x38; //0x30
+  GPIO_PORTB_DATA_R |= 0x30;
+  pulseE();
+
+  GPIO_PORTB_DATA_R |= 0x30;
+  pulseE();
+
+  GPIO_PORTB_DATA_R |= 0x38;
   pulseE();
 
   GPIO_PORTB_DATA_R &= 0;
@@ -54,13 +59,13 @@ void display_init(){
   pulseE();
 
   GPIO_PORTB_DATA_R &= 0;
-  GPIO_PORTB_DATA_R |= 0xF;//0xF
+  GPIO_PORTB_DATA_R |= 0xF;
   pulseE();
- 
+
 }
 
 // pre: takes in reset and the char as parameters
-// post: writes a character to the LCD Display on reset
+// post: writes a character to the LCD Display on reset. Will only write to display if reset == 1
 void display_write(int reset, char w) {
   if (reset) {
     GPIO_PORTD_DATA_R |= 0x80; // turns only reset on
@@ -80,7 +85,7 @@ void display_write(int reset, char w) {
 void clear_display() {
   GPIO_PORTB_DATA_R = 0x1;
   GPIO_PORTD_DATA_R &= 0;
-  //pulse, for data to be interpreted 
+  //pulse, for data to be interpreted
   pulseE();
 }
 
@@ -116,7 +121,7 @@ void shiftLeft() {
 //pre: takes in a String(array of char) to be printed out on the LCD
 //post: displays the string on the LCD diplay
 void display_string(char* g) {
-  //iterating till you hit the null character (\0)
+  //iterating till you hit the null character ('\0')
   while (*g) {
     display_write(1, *g);
     g++;
