@@ -5,3 +5,5 @@
 ## Lab 2: Using the LCD Display
 * Learned how to initialize and use peripherals
 * Created a DDR game on LCD Display
+
+## Lab3: Interrupts
