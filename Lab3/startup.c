@@ -35,6 +35,9 @@
 // Forward declaration of the default fault handlers.
 //
 //*****************************************************************************
+
+#include "TimerSetup.h"
+
 void ResetISR(void);
 static void NmiSR(void);
 static void FaultISR(void);
@@ -112,7 +115,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
-    IntDefaultHandler,                      // Timer 0 subtimer A
+    Timer0IntHandler,                       // Timer 0 subtimer A
     IntDefaultHandler,                      // Timer 0 subtimer B
     IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
