@@ -6,6 +6,7 @@ void Timer0IntHandler(void) {
   //if(ADC0_SSFIFO0_R >= 0x1000000000){
     LED_toggle();
   //}
+    
 }
 
 //SYSCTL_RCGC1_R = SYSCTL_RCGC1_TIMER0;
