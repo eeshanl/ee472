@@ -1,9 +1,9 @@
 //*****************************************************************************
 //
-// startup.c - Startup code for use with IAR's Embedded Workbench,
+// startup_ewarm.c - Startup code for use with IAR's Embedded Workbench,
 //                   version 5.
 //
-// Copyright (c) 2007-2012 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2006-2013 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -19,7 +19,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 9453 of the EK-LM3S8962 Firmware Package.
+// This is part of revision 10007 of the EK-LM3S8962 Firmware Package.
 //
 //*****************************************************************************
 
@@ -35,7 +35,6 @@
 // Forward declaration of the default fault handlers.
 //
 //*****************************************************************************
-
 #include "TimerSetup.h"
 
 void ResetISR(void);

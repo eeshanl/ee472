@@ -13,5 +13,6 @@ extern void timer0_init();
 extern void delay(unsigned long aValue);
 extern void LED_init();
 extern void LED_toggle();
+extern void ADC_init();
 
 #endif
