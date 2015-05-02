@@ -1,7 +1,5 @@
 #include "TimerSetup.h"
 
-
-
 //*****************************************************************************
 //
 //*****************************************************************************
@@ -12,21 +10,23 @@ __error__(char *pcFilename, unsigned long ulLine)
 }
 #endif
 
-// booleans. 1 is TRUE 0 is FALSE
+// booleans:
 #define TRUE 1 // defines TRUE to be 1
 #define FALSE 0 // defines FALSE to be 0
 
 int
 main(void) {
   // Set the clocking to run directly from the crystal.
-  SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
-  SYSCTL_XTAL_8MHZ);
+  SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ);
 
   LED_init();
   timer0_init();
+  //ADC_init();
+  //GPIO_PORTF_DATA_R &= 0x00000000;
   
   // main loop
   while(TRUE) {
+
   }
   
 }
@@ -57,4 +57,9 @@ void LED_init() {
 // Toggles the LED on the board
 void LED_toggle() {
   GPIO_PORTF_DATA_R ^= 0x00000001;
+}
+
+void ADC_init() {
+  SYSCTL_RCGC0_R = 0x10000;
+  ADC0_ACTSS_R = 0x1;
 }
