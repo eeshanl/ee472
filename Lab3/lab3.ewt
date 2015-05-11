@@ -171,7 +171,25 @@
     </settings>
   </configuration>
   <file>
+    <name>$PROJ_DIR$\ddr.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\display.c</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\..\..\..\..\driverlib\ewarm-cm3\Exe\driverlib-cm3.a</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\gth.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\header.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\InterruptSetup.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\keypad.c</name>
   </file>
   <file>
     <name>$PROJ_DIR$\main.c</name>
@@ -184,12 +202,6 @@
   </file>
   <file>
     <name>$PROJ_DIR$\startup.c</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\TimerSetup.c</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\TimerSetup.h</name>
   </file>
 </project>
 
