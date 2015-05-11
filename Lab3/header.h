@@ -10,28 +10,28 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-void LED_toggle();
-void LED_init();
-void key_init();
-void display_init();
-void pulseE();
-void portBD_init();
-void display_write(int reset, char w);
-void display_string(char* g);
-void clear_display();
-void shiftRight();
-void shiftLeft();
-void cursorLeft();
-void cursorRight();
-void startGame(int level);
-int checkInput(char input, int key);
-void goToStateOne();
-void countDown();
-void WinOrLose();
-void mainMenuForGTH();
-void testGame(unsigned long int timeLimit);
-int getRandomNumber();
-int replay();
+extern void LED_toggle();
+extern void LED_init();
+extern void key_init();
+extern void display_init();
+extern void pulseE();
+extern void portBD_init();
+extern void display_write(int reset, char w);
+extern void display_string(char* g);
+extern void clear_display();
+extern void shiftRight();
+extern void shiftLeft();
+extern void cursorLeft();
+extern void cursorRight();
+extern void startGame(int level);
+extern int checkInput(char input, int key);
+extern void goToStateOne();
+extern void countDown();
+extern void WinOrLose();
+extern void mainMenuForGTH();
+extern void testGame(unsigned long int timeLimit);
+extern int getRandomNumber();
+extern int replay();
 
 extern void Timer0IntHandler(void);
 extern void Timer1EventHandler(void);
@@ -47,21 +47,11 @@ extern int fresh_key();
 extern void init_GPIOE();
 extern void GPIOEventHandler();
 extern void init_GPIOF(void);
-int getDebounce();
-unsigned long int getTimer1();
-unsigned long int getSeed();
+extern int getDebounce();
+extern unsigned long int getTimer1();
+extern unsigned long int getSeed();
 extern void timer2_init();
 extern void Timer2EventHandler(void);
-void speaker_init();
-
-
-
-
-
-
-
-
-
-
+extern void speaker_init();
 
 #endif

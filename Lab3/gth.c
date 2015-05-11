@@ -3,7 +3,6 @@
 #define RANGE 50
 int state = 1;
 char* str = ""; 
-unsigned long int timeForLevel = 0; //time limit for guessing the correct height
 
 // once the game starts, it allows the key presses to be used to play the game instead of controlling the menu
 int gameTime = 0;

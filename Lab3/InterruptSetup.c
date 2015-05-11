@@ -1,5 +1,4 @@
 #include "header.h"
-#define MAX 0x100000
 
 unsigned long int timer1 = 0xFFFFFFFF;
 unsigned long int randomSeed = 0xFFFFFFFF;
