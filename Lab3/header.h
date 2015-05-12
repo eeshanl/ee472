@@ -52,6 +52,5 @@ extern unsigned long int getTimer1();
 extern unsigned long int getSeed();
 extern void timer2_init();
 extern void Timer2EventHandler(void);
-extern void speaker_init();
 
 #endif

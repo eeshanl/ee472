@@ -100,7 +100,6 @@ unsigned long int chooseLevel(int level){
   }
 }
 
-
 //pre: takes in the level of the game the user wants to play
 void startGame(int level) {
   int playAgain = 1;
@@ -179,6 +178,7 @@ void WinOrLose() {
   clear_display();
 }
 
+// main menu for the guess the height game
 void mainMenuForGTH() {
   int key = keymaster(); // captures the user key input
   if (gameTime == 0) {

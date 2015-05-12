@@ -49,6 +49,7 @@ main(void) {
   char* str = "Let's Play GTH!                         Press sel to go!\0";
   // prints out the initial message
   display_string(str);
+  
   // main loop
   while(TRUE) {
     // main state representing the easy screen of the main menu
@@ -119,14 +120,4 @@ void ADC_init() {
   SYSCTL_RCGC0_R |= 0x10000;
   delay(100);
   ADC0_ACTSS_R = 0x1;
-}
-
-void speaker_init() {
-  SYSCTL_RCGC2_R |= 0x00000040;
-  delay(100);
-  GPIO_PORTF_DIR_R |= 0x00000002;
-  GPIO_PORTG_AFSEL_R &= 0x00000000;
-  GPIO_PORTG_DEN_R |= 0x2;
-  GPIO_PORTG_PUR_R |= 0x2;
-  GPIO_PORTG_DATA_R |= 0x2;
 }
