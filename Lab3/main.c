@@ -110,7 +110,10 @@ void LED_toggle() {
   GPIO_PORTF_DATA_R ^= 0x00000001;
 }
 
+// initializes the ADC so that the sensor can be used to recieve distances
 void ADC_init() {
+
+  // enables ADC0
   SYSCTL_RCGC0_R = 0x0;
   delay(100);
   SYSCTL_RCGC0_R |= 0x10000;
