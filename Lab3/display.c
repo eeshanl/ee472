@@ -1,5 +1,7 @@
 #include "header.h"
-/* This file contains all functions related to the LCD Display */
+/* This file contains all functions related to the LCD Display
+   This is from Lab 2, this is unmodified.
+*/
 
 
 // Pulses the enable bit on and off
@@ -37,7 +39,7 @@ void display_init(){
   pulseE();
 
   GPIO_PORTB_DATA_R |= 0x30;
-  pulseE(); 
+  pulseE();
 
   GPIO_PORTB_DATA_R |= 0x30;
   pulseE();

@@ -1,58 +1,63 @@
 #include "header.h"
 
-#define RANGE 50
-int state = 1;
-char* str = ""; 
+#define RANGE 50 // gives the range that is valid input for the Guess the Height Game
+
+int state = 1; // state reprenting if you are in easy, medium, or hard mode
+char* str = ""; // stores a string
 
 // once the game starts, it allows the key presses to be used to play the game instead of controlling the menu
 int gameTime = 0;
-int score = 0;
-void testGame(unsigned long int timeLimit){
- 
-  int safe = 0;
-  unsigned long int finishTime = 0;
-  unsigned long int time = getTimer1() - timeLimit;
-  int random = getRandomNumber();
- // int i = 0;
-  //int r[] = {800, 100, 800, 100, 800, 100, 800, 100, 800, 100};
-  //int random = r[0];
-  while(score < 9 && getTimer1() > time){ //time taken to complete the game
-    int dist = ADC0_SSFIFO0_R;
-    
-//    char myData[5];
-//    int a = dist/1000;
-//    int b = (dist%1000)/100;
-//    int c = (dist%1000%100)/10;
-//    int d = (dist % 1000 % 100 % 10);
-//    myData[0] = a + '0';
-//    myData[1] = b + '0';
-//    myData[2] = c + '0';
-//    myData[3] = d + '0';
-//    myData[4] = '\0';
 
-    
-    if(dist < random - RANGE) {
+// stores teh score of the game
+int score = 0;
+
+// Passes in a timeLimit for the game. The timeLimit is changed based on difficulty
+// game loop to play the Guess the height game
+void testGame(unsigned long int timeLimit){
+
+  // a flag used to display which state you are in while playing the game.
+  // too high
+  // too low
+  // hold
+  int safe = 0;
+
+  // the time that the user must hold a specific height for
+  unsigned long int finishTime = 0;
+
+  // holds the value of the total time the player has to play the game.
+  // used the getTimer1() method to return the value of the right now
+  unsigned long int time = getTimer1() - timeLimit;
+
+  // random number between 100 and 924
+  int random = getRandomNumber();
+
+  // game loop to play the game. exits when player wins (score == 9) or if they player exceeds the time limit
+  while(score < 9 && getTimer1() > time){ //time taken to complete the game
+    // reads the value from the distance sensor and saves it here
+    int dist = ADC0_SSFIFO0_R;
+
+    if(dist < random - RANGE) { // displays to the LCD display if you are higher than the desired height
       if (safe != 3) {
         clear_display();
         display_string("Too High\0");
       }
       safe = 3;
-    } else if (dist > random + RANGE) {
+    } else if (dist > random + RANGE) { // displays to the LCD display if you are lower than the desired height
       if (safe != 2) {
         clear_display();
         display_string("Too Low\0");
       }
       safe = 2;
-    } else {
+    } else { // // displays to the LCD display if you at the desired height
       if (safe != 1) {
         clear_display();
-        display_string("Hold\0");
+        display_string("Hold\0"); // prints "Hold" when you are at the desired height
       }
       if (safe == 1) {
+        // if you held at the desired height for the required time, then you get one more point
         if (getTimer1() < finishTime) {
-          //i++;
-          //random = r[i];
-          random = getRandomNumber();
+
+          random = getRandomNumber(); // resets the random number for the distance that the player is trying to get to
           score++;
           safe = 0;
         }
@@ -64,9 +69,9 @@ void testGame(unsigned long int timeLimit){
   }
 }
 
-//TODO: GENERATE RANDOM NUMBER FOR THE HEIGHT
+// random number generator for the height
 int getRandomNumber(){
-  return getSeed() % 824 + 100;
+  return getSeed() % 824 + 100; // gives a range between 100 and 924
 }
 
 // Once the game is over, the scroll Main Menu is displayed again.
@@ -103,10 +108,10 @@ void startGame(int level) {
   while (playAgain) { //playAgain set to 1 to prime the loop
     //starts countDown for the game to begin
     countDown();
-    
+
     clear_display();
     testGame(chooseLevel(level));
-  
+
     WinOrLose();
     playAgain = replay(playAgain);
   }
@@ -126,7 +131,7 @@ int replay(int playAgain){
     }
     if (press == 2) {
       clear_display();
-    } else { 
+    } else {
       playAgain = 0;
     }
     score = 0;
