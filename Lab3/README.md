@@ -37,14 +37,14 @@ Created a game of 'Guess the Height' using the sensor and displayed its menu on 
 ## Hardware Setup
 We attached the LCD display to the LM3S8962 Micro-controller using the GPIO pins on Port B and D. To see the full schematic, please view the hardware schematic in the report document. We attached the sensor to the 
 
-LCD SETUP
+####LCD SETUP
 - The data bits correspond to bits 0 - 6 on Port B. Bit 7 on Port B is unused and is set to ground.
 - The Enable, R/W, and RS is wired to bits 5, 6, and 7 on Port D.
 - VDD is given 5V
 - VCC is wired to a 100K Ohm Potentiometer that is used to vary the display brightness
 - VSS is set to ground
 
-SENSOR SETUP
+####SENSOR SETUP
 - Power of the sensor is connected 5V
 - Ground is connected to ground
 - The white wire should be plugged into the ADC0 header on the Stellaris board.
