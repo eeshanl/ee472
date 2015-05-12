@@ -29,7 +29,7 @@ extern void goToStateOne();
 extern void countDown();
 extern void WinOrLose();
 extern void mainMenuForGTH();
-extern void testGame(unsigned long int timeLimit);
+extern void game(unsigned long int timeLimit);
 extern int getRandomNumber();
 extern int replay();
 
