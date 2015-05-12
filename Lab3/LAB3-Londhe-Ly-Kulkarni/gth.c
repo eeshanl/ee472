@@ -13,7 +13,7 @@ int score = 0;
 
 // Passes in a timeLimit for the game. The timeLimit is changed based on difficulty
 // game loop to play the Guess the height game
-void testGame(unsigned long int timeLimit){
+void game(unsigned long int timeLimit){
 
   // a flag used to display which state you are in while playing the game.
   // too high
@@ -88,15 +88,15 @@ void goToStateOne() {
 //changes the speed of the game according to the level of difficulty the
 //user chooses to play
 //easy ==> time is 999999 (basically unlimitted time)
-//medium ==> time is 500
-//hard ==> time is 400
+//medium ==> time is 500 about 35-40 seconds
+//hard ==> time is 400   about 30 seconds
 unsigned long int chooseLevel(int level){
   if (level == 1) {
-    return 999999;
+    return 999999; // a very long time
   } else if (level == 2) {
-    return 500;
+    return 500; // about 35-40 seconds
   } else {
-    return 400;
+    return 400; // equivalent to about 30 seconds
   }
 }
 
@@ -109,7 +109,7 @@ void startGame(int level) {
     countDown();
 
     clear_display();
-    testGame(chooseLevel(level));
+    game(chooseLevel(level));
 
     WinOrLose();
     playAgain = replay(playAgain);
@@ -174,7 +174,7 @@ void WinOrLose() {
     display_string("YOU LOSE!!                                Score: \0");
     display_string(point);
   }
-  delay(16000);
+  delay(20000);
   clear_display();
 }
 
