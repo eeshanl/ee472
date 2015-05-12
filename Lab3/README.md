@@ -52,7 +52,7 @@ We attached the LCD display to the LM3S8962 Micro-controller using the GPIO pins
 ## Included Files
 
 #### main.c
-- This file contains the main function that is executed on the LM3S962 board. It runs the DDR game and menu on the LCD Display.
+- This file contains the main function that is executed on the LM3S962 board. It runs the GTH game and menu on the LCD Display.
 
 #### header.h
 - Contains all prototypes of all functions used in creating this overall program.
@@ -62,9 +62,6 @@ We attached the LCD display to the LM3S8962 Micro-controller using the GPIO pins
 
 #### display.c
 - Contains all initializations and other functions to use the LCD Display on the LM3S8962 Micro-controller. (See Hardware Setup for how the LCD Display is wired to the board)
-
-#### ddr.c
-- Contains all functions needed to play the DDR game on the LCD Display
 
 #### InterruptSetup.c
 - Contains all functions needed for initializing Timers and GPIO interrupts as well as event handlers for them 
