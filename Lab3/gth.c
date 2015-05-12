@@ -87,9 +87,9 @@ void goToStateOne() {
 
 //changes the speed of the game according to the level of difficulty the
 //user chooses to play
-//easy ==> height range = +-200
-//medium ==> height range = +-100
-//hard ==> height range = +-50
+//easy ==> time is 999999 (basically unlimitted time)
+//medium ==> time is 500
+//hard ==> time is 400
 unsigned long int chooseLevel(int level){
   if (level == 1) {
     return 999999;
