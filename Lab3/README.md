@@ -30,7 +30,8 @@ Created a game of 'Higher or Lower' using the sensor and displayed its menu on t
 #### Denny Ly
 - Created flow diagrams and schematic
 - Worked on high-low sensing game functionality, initialization and functionality of the LCD Display, and initialization of the GPIO port 
-- Looked up the data sheets to find the correct addresses on the Vector Table 
+- Looked up the data sheets to find the correct addresses on the Vector Table
+
 <b>Overall, we distributed the work fairly evenly.</b>
 
 ## Hardware Setup
@@ -64,6 +65,15 @@ SENSOR SETUP
 
 #### ddr.c
 - Contains all functions needed to play the DDR game on the LCD Display
+
+#### InterruptSetup.c
+- Contains all functions needed for initializing Timers and GPIO interrupts as well as event handlers for them 
+
+#### gth.c
+- Contains all functions need to play the 'Guess the Height' game using the sensor and LCD Display
+
+#### startup.c
+- Contains the Vector Table 
 
 ## Notes
 
