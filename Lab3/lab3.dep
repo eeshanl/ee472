@@ -6,23 +6,26 @@
   <configuration>
     <name>Debug</name>
     <outputs>
-      <file>$PROJ_DIR$\Debug\Obj\lab3.pbd</file>
-      <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
-      <file>$PROJ_DIR$\Debug\Obj\startup_ewarm.o</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\cpu.h</file>
-      <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_memmap.h</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_types.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\display.pbi</file>
-      <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
-      <file>$PROJ_DIR$\Debug\Obj\gth.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\gth.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\ddr.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\display.o</file>
-      <file>$PROJ_DIR$\Debug\Exe\c.out</file>
+      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.pbi</file>
+      <file>$PROJ_DIR$\..\..\hello\startup_ewarm.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\startup.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\keypad.pbi</file>
+      <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\LM3S8962.icf</file>
+      <file>$PROJ_DIR$\Debug\Obj\keypad.o</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\sysctl.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.pbi</file>
+      <file>$PROJ_DIR$\TimerSetup.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.o</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_ssi.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_sysctl.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\TimerSetup.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\lm3s8962.h</file>
       <file>$PROJ_DIR$\..\..\..\..\driverlib\ewarm-cm3\Exe\driverlib-cm3.a</file>
-      <file>$PROJ_DIR$\gth.c</file>
       <file>$PROJ_DIR$\display.c</file>
+      <file>$PROJ_DIR$\ddr.c</file>
+      <file>$PROJ_DIR$\gth.c</file>
       <file>$PROJ_DIR$\header.h</file>
       <file>$PROJ_DIR$\InterruptSetup.c</file>
       <file>$PROJ_DIR$\keypad.c</file>
@@ -30,6 +33,20 @@
       <file>$PROJ_DIR$\..\..\drivers\rit128x96x4.c</file>
       <file>$PROJ_DIR$\..\..\drivers\rit128x96x4.h</file>
       <file>$PROJ_DIR$\startup.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\lab3.pbd</file>
+      <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+      <file>$PROJ_DIR$\Debug\Obj\startup_ewarm.o</file>
+      <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
+      <file>$PROJ_DIR$\Debug\Obj\gth.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\display.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_memmap.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_types.h</file>
+      <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\cpu.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\gth.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\ddr.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\display.o</file>
+      <file>$PROJ_DIR$\Debug\Exe\c.out</file>
       <file>$PROJ_DIR$\..\..\..\..\driverlib\ssi.h</file>
       <file>$PROJ_DIR$\..\..\..\..\driverlib\debug.h</file>
       <file>$PROJ_DIR$\..\..\..\..\driverlib\pin_map.h</file>
@@ -39,62 +56,178 @@
       <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
       <file>$PROJ_DIR$\Debug\Obj\ddr.o</file>
       <file>$PROJ_DIR$\Debug\Obj\startup_ewarm.pbi</file>
-      <file>$PROJ_DIR$\..\..\hello\startup_ewarm.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\startup.pbi</file>
-      <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\LM3S8962.icf</file>
-      <file>$PROJ_DIR$\Debug\Obj\keypad.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\keypad.pbi</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\sysctl.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.pbi</file>
-      <file>$PROJ_DIR$\TimerSetup.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.o</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_sysctl.h</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_ssi.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\TimerSetup.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\lm3s8962.h</file>
-      <file>$PROJ_DIR$\ddr.c</file>
     </outputs>
     <file>
-      <name>$PROJ_DIR$\Debug\Exe\c.out</name>
-      <inputs>
-        <tool>
-          <name>ILINK</name>
-          <file> 36 31 12 14 9 43 37 47 27 28 30 8 4 1</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\gth.c</name>
+      <name>$PROJ_DIR$\..\..\hello\startup_ewarm.c</name>
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 9</file>
+          <file> 29</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 10</file>
+          <file> 49</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\TimerSetup.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 14</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-        <tool>
           <name>BICOMP</name>
-          <file> 17 48 22 6 25 39 3</file>
+          <file> 20 15 25 34 42 6 36</file>
         </tool>
       </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 40</file>
+        </tool>
+      </outputs>
     </file>
     <file>
       <name>$PROJ_DIR$\display.c</name>
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 12</file>
+          <file> 39</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 32</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\ddr.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 48</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 38</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\gth.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 31</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 37</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\InterruptSetup.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 10</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 0</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\keypad.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 5</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 3</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 13</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 9</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\drivers\rit128x96x4.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 44</file>
         </tool>
         <tool>
           <name>BICOMP</name>
@@ -104,103 +237,11 @@
       <inputs>
         <tool>
           <name>ICCARM</name>
-          <file> 17 48 22 6 25 39 3</file>
+          <file> 11 33 12 34 42 46 43 41 6 25</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\InterruptSetup.c</name>
-      <outputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 43</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 34</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\keypad.c</name>
-      <outputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 37</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 38</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\main.c</name>
-      <outputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 47</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 42</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\drivers\rit128x96x4.c</name>
-      <outputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 27</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 40</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 45 5 44 6 25 29 26 24 39 22</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 45 5 44 6 25 29 26 24 39 22</file>
+          <file> 11 33 12 34 42 46 43 41 6 25</file>
         </tool>
       </inputs>
     </file>
@@ -209,73 +250,32 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 28</file>
+          <file> 45</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 35</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 17 48 22 6 25 39 3</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\hello\startup_ewarm.c</name>
-      <outputs>
-        <tool>
-          <name>ICCARM</name>
           <file> 2</file>
         </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 32</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\TimerSetup.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 46</file>
-        </tool>
       </outputs>
       <inputs>
         <tool>
+          <name>ICCARM</name>
+          <file> 20 15 25 34 42 6 36</file>
+        </tool>
+        <tool>
           <name>BICOMP</name>
-          <file> 17 48 22 6 25 39 3</file>
+          <file> 20 15 25 34 42 6 36</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\ddr.c</name>
-      <outputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 31</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 11</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>[ROOT_NODE]</name>
-      <outputs>
+      <name>$PROJ_DIR$\Debug\Exe\c.out</name>
+      <inputs>
         <tool>
           <name>ILINK</name>
-          <file> 13</file>
+          <file> 4 48 39 16 31 10 5 13 44 45 47 30 35 28</file>
         </tool>
-      </outputs>
+      </inputs>
     </file>
   </configuration>
   <configuration>

@@ -99,19 +99,19 @@ void GPIOEventHandler(){
 
 // Timer0 event handler to sample the ADC value from the sensor.
 void Timer0IntHandler(){
-  // clears interrupt status
-  TIMER0_ICR_R |= 0x01;
-
-  // samples the adc value so that data is read from the sensor
-  ADC0_PSSI_R |= 0x1;
+//  // clears interrupt status
+//  TIMER0_ICR_R |= 0x01;
+//
+//  // samples the adc value so that data is read from the sensor
+//  ADC0_PSSI_R |= 0x1;
 
 /* This blinks the led based off of the distance value read from the sensor. */
 //  LAB 3
-//  TIMER0_ICR_R |= 0x01;
-//  ADC0_PSSI_R |= 0x1;
-//  int dist = ADC0_SSFIFO0_R;
-//  TIMER1_TAILR_R = 0x50000 - 128 * dist;
-//  debugHeight(dist);
+  TIMER0_ICR_R |= 0x01;
+  ADC0_PSSI_R |= 0x1;
+  int dist = ADC0_SSFIFO0_R;
+  TIMER1_TAILR_R = 0x50000 - 128 * dist;
+  debugHeight(dist);
 }
 
 // A method used to debug our code. We pass in the distance value read from the sensor and print it
@@ -141,13 +141,13 @@ void debugHeight(int dist){
 // Timer 1 event handler. used to decrement the timer1 variable. We use this variable to model a clock to
 // time events in our menu and game.
 void Timer1EventHandler(void) {
-  TIMER1_ICR_R |= 0x01; // clears interrupt status
-  timer1--;
+//  TIMER1_ICR_R |= 0x01; // clears interrupt status
+//  timer1--;
 
   /* Toggles the LED when hovering over the sensor */
   //LAB 3
-  //TIMER1_ICR_R |= 0x01;
-  // LED_toggle();
+  TIMER1_ICR_R |= 0x01;
+   LED_toggle();
 }
 
 // Timer 2 event handler. Used the decrement the timee2 variable. We use this variable to act as a
