@@ -1,4 +1,4 @@
-"C:\StellarisWare\boards\ek-lm3s8962\ee472\Lab4\main.c"
+"C:\StellarisWare\boards\ek-lm3s8962\ee472\Lab4\keypad.c"
 -std=c99
 -ferror-limit=100
 -I

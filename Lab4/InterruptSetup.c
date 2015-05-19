@@ -4,6 +4,15 @@
 
 #include "InterruptSetup.h"
 #include "keypad.h"
+#include "main.h"
+
+#include "inc/lm3s8962.h"
+#include "drivers/rit128x96x4.h"
+#include "inc/hw_types.h"
+#include "driverlib/debug.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/cpu.h"
+
 
 unsigned long int timer1 = 0xFFFFFFFF; // Timer 1. Used as a clock to time how long events are taking.
 unsigned long int randomSeed = 0xFFFFFFFF; // a value used as a random seed. Timer2 decrements this value.
@@ -109,15 +118,37 @@ void Timer0IntHandler(){
 /* This blinks the led based off of the distance value read from the sensor. */
 //  LAB 3
   TIMER0_ICR_R |= 0x01;
+  
+  
+  ADC_SSMUX0_R = 0x0;
+  delay(100);
   ADC0_PSSI_R |= 0x1;
-  int dist = ADC0_SSFIFO0_R;
-  TIMER1_TAILR_R = 0x50000 - 128 * dist;
-  debugHeight(dist);
+  int dist0 = ADC0_SSFIFO0_R;
+  
+  ADC_SSMUX0_R = 0x1;
+  delay(10);
+  ADC0_PSSI_R |= 0x1;
+  int dist1 = ADC0_SSFIFO0_R;
+  
+  ADC_SSMUX0_R = 0x2;
+  delay(10);
+  ADC0_PSSI_R |= 0x1;
+  int dist2 = ADC0_SSFIFO0_R;
+  
+  ADC_SSMUX0_R = 0x3;
+  delay(10);
+  ADC0_PSSI_R |= 0x1;
+  int dist3 = ADC0_SSFIFO0_R;
+  
+  debugHeight(dist0, 24);
+  debugHeight(dist1, 34);
+  debugHeight(dist2, 44);
+  debugHeight(dist3, 54);
 }
 
 // A method used to debug our code. We pass in the distance value read from the sensor and print it
 // out to the OLED screen
-void debugHeight(int dist){
+void debugHeight(int dist, int y){
   int value = dist;
   char myData[6];
   int a;
@@ -135,7 +166,7 @@ void debugHeight(int dist){
   myData[4] = '\0';
 
   // prints to the OLED
-  RIT128x96x4StringDraw(myData, 30, 24, 15);
+  RIT128x96x4StringDraw(myData, 30, y, 15);
 
 }
 
