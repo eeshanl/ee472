@@ -27,8 +27,7 @@ __error__(char *pcFilename, unsigned long ulLine)
 #define FALSE 0 // defines FALSE to be 0
 
 
-int
-main(void) {
+int main(void) {
   // Set the clocking to run directly from the crystal.
   SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ);
 
