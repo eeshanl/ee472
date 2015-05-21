@@ -5,6 +5,7 @@
 
 void ADCInit();
 void vTaskADC(void *vParameters);
+void vTaskADCAverage(void *vParameters);
 void debugHeight(int dist, int y);
 
 #endif

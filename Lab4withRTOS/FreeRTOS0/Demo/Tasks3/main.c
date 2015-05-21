@@ -225,8 +225,6 @@ void vApplicationTickHook( void );
   themselves, then sleep
 */
 
-void vTask1(void *vParameters);
-void vTask2(void *vParameters);
 void vTask3(void *vParameters);
 
 
@@ -294,7 +292,7 @@ int main() {
     xTaskCreate( vOLEDTask, ( signed portCHAR * ) "OLED", mainOLED_TASK_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 
     xTaskCreate(vTaskADC, "Task ADC", 100,NULL, 1,NULL);
-//    xTaskCreate(vTask, "Task 2", 100,NULL, 2,NULL);
+    //xTaskCreate(vTaskADCAverage, "Task Average", 100,NULL, 1,NULL);
 //    xTaskCreate(vTask3, "Task 3", 100,NULL, 3,NULL);
     
     /* 
@@ -318,24 +316,6 @@ int main() {
 /*
   three dummy tasks
 */
-
-void vTask2(void *vParameters)
-{
-  xOLEDMessage xMessage;
-   
-  volatile unsigned long ul;  
-  const char *T1Text = "Task 2 is running\n\r";
-  
-  xMessage.pcMessage = "Bon Jour, Task 2";
-  
-  while(1)
-  {
-     // Send the message to the OLED gatekeeper for display. 
-     xQueueSend( xOLEDQueue, &xMessage, 0 );
-    
-     vTaskDelay(3000);
-  }
-}
 
 void vTask3(void *vParameters)
 {
