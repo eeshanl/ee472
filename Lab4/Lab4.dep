@@ -6,75 +6,66 @@
   <configuration>
     <name>Debug</name>
     <outputs>
+      <file>$PROJ_DIR$\Debug\Obj\adc.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\sysctl.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.pbi</file>
+      <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_ssi.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.o</file>
+      <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\cpu.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\adc.o</file>
+      <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
+      <file>$PROJ_DIR$\InterruptSetup.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\ssi.h</file>
+      <file>$PROJ_DIR$\startup.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\keypad.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\keypad.o</file>
+      <file>$PROJ_DIR$\..\..\drivers\rit128x96x4.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\gpio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.o</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\pin_map.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\driverlib\debug.h</file>
+      <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\LM3S8962.icf</file>
       <file>$PROJ_DIR$\..\..\..\..\driverlib\ewarm-cm3\Exe\driverlib-cm3.a</file>
       <file>$PROJ_DIR$\InterruptSetup.c</file>
       <file>$PROJ_DIR$\adc.c</file>
       <file>$PROJ_DIR$\keypad.c</file>
       <file>$PROJ_DIR$\main.c</file>
       <file>$PROJ_DIR$\..\..\drivers\rit128x96x4.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\keypad.pbi</file>
-      <file>$PROJ_DIR$\InterruptSetup.h</file>
-      <file>$PROJ_DIR$\startup.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
-      <file>$PROJ_DIR$\..\..\drivers\rit128x96x4.h</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\ssi.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.o</file>
-      <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\LM3S8962.icf</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_memmap.h</file>
       <file>$PROJ_DIR$\Debug\Exe\c.out</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\gpio.h</file>
+      <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
+      <file>$PROJ_DIR$\main.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_types.h</file>
+      <file>$PROJ_DIR$\adc.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\inc\hw_sysctl.h</file>
       <file>$PROJ_DIR$\..\..\..\..\inc\lm3s8962.h</file>
       <file>$PROJ_DIR$\keypad.h</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_memmap.h</file>
-      <file>$PROJ_DIR$\adc.h</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\pin_map.h</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\debug.h</file>
-      <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_types.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\adc.pbi</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_ssi.h</file>
-      <file>$PROJ_DIR$\..\..\..\..\inc\hw_sysctl.h</file>
-      <file>$PROJ_DIR$\main.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\InterruptSetup.pbi</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\sysctl.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.pbi</file>
-      <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
-      <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.o</file>
-      <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
-      <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
-      <file>$PROJ_DIR$\Debug\Obj\adc.o</file>
-      <file>$PROJ_DIR$\..\..\..\..\driverlib\cpu.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\keypad.o</file>
     </outputs>
-    <file>
-      <name>[ROOT_NODE]</name>
-      <outputs>
-        <tool>
-          <name>ILINK</name>
-          <file> 14</file>
-        </tool>
-      </outputs>
-    </file>
     <file>
       <name>$PROJ_DIR$\InterruptSetup.c</name>
       <outputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 12</file>
+          <name>BICOMP</name>
+          <file> 5</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 29</file>
+          <name>ICCARM</name>
+          <file> 20</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 7 18 28 17 10 24 22 30 37</file>
+          <name>BICOMP</name>
+          <file> 11 38 33 37 16 34 22 1 8</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 7 18 28 17 10 24 22 30 37</file>
+          <name>ICCARM</name>
+          <file> 11 38 33 37 16 34 22 1 8</file>
         </tool>
       </inputs>
     </file>
@@ -82,22 +73,22 @@
       <name>$PROJ_DIR$\adc.c</name>
       <outputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 36</file>
+          <name>BICOMP</name>
+          <file> 0</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 25</file>
+          <name>ICCARM</name>
+          <file> 9</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 20 28 17 10 24 22 30 37</file>
+          <name>BICOMP</name>
+          <file> 35 33 37 16 34 22 1 8</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 20 28 17 10 24 22 30 37</file>
+          <name>ICCARM</name>
+          <file> 35 33 37 16 34 22 1 8</file>
         </tool>
       </inputs>
     </file>
@@ -105,22 +96,22 @@
       <name>$PROJ_DIR$\keypad.c</name>
       <outputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 38</file>
+          <name>BICOMP</name>
+          <file> 14</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 6</file>
+          <name>ICCARM</name>
+          <file> 15</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 18 7 28 17 10 24 22 30 37</file>
+          <name>BICOMP</name>
+          <file> 38 11 33 37 16 34 22 1 8</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 18 7 28 17 10 24 22 30 37</file>
+          <name>ICCARM</name>
+          <file> 38 11 33 37 16 34 22 1 8</file>
         </tool>
       </inputs>
     </file>
@@ -128,22 +119,22 @@
       <name>$PROJ_DIR$\main.c</name>
       <outputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 15</file>
+          <name>BICOMP</name>
+          <file> 17</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 9</file>
+          <name>ICCARM</name>
+          <file> 19</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 17 10 24 22 30 37 28 20 18 8 7</file>
+          <name>BICOMP</name>
+          <file> 37 16 34 22 1 8 33 35 38 13 11</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 17 10 24 22 30 37 28 20 18 8 7</file>
+          <name>ICCARM</name>
+          <file> 37 16 34 22 1 8 33 35 38 13 11</file>
         </tool>
       </inputs>
     </file>
@@ -151,22 +142,22 @@
       <name>$PROJ_DIR$\..\..\drivers\rit128x96x4.c</name>
       <outputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 33</file>
+          <name>BICOMP</name>
+          <file> 2</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 31</file>
+          <name>ICCARM</name>
+          <file> 6</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>ICCARM</name>
-          <file> 26 19 27 24 22 16 21 11 30 10</file>
+          <name>BICOMP</name>
+          <file> 4 30 36 34 22 18 21 12 1 16</file>
         </tool>
         <tool>
-          <name>BICOMP</name>
-          <file> 26 19 27 24 22 16 21 11 30 10</file>
+          <name>ICCARM</name>
+          <file> 4 30 36 34 22 18 21 12 1 16</file>
         </tool>
       </inputs>
     </file>
@@ -175,9 +166,18 @@
       <inputs>
         <tool>
           <name>ILINK</name>
-          <file> 13 36 0 12 38 15 33 23 35 32 34</file>
+          <file> 23 9 24 20 15 19 6 32 10 3 7</file>
         </tool>
       </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 31</file>
+        </tool>
+      </outputs>
     </file>
   </configuration>
   <configuration>

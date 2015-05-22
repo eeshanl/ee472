@@ -244,7 +244,6 @@ xQueueHandle xOLEDQueue;
  * various Luminary Micro EKs.
  *************************************************************************/
 
-
 int main() {
     RIT128x96x4Init(1000000);
   //Initializes the LED
@@ -258,7 +257,7 @@ int main() {
   //Initializes GPIO PORT F and enables its interrupts
   init_GPIOF();
     prvSetupHardware();
-
+    
     /*  
         Create the queue used by the OLED task.  Messages for display on the OLED
         are received via this queue. 
@@ -289,10 +288,10 @@ int main() {
     
     /* Start the tasks */
     
-    xTaskCreate( vOLEDTask, ( signed portCHAR * ) "OLED", mainOLED_TASK_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+    //xTaskCreate( vOLEDTask, ( signed portCHAR * ) "OLED", mainOLED_TASK_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 
     xTaskCreate(vTaskADC, "Task ADC", 100,NULL, 1,NULL);
-    //xTaskCreate(vTaskADCAverage, "Task Average", 100,NULL, 1,NULL);
+    xTaskCreate(vTaskADCAverage, "Task Average", 100,NULL, 1,NULL);
 //    xTaskCreate(vTask3, "Task 3", 100,NULL, 3,NULL);
     
     /* 
@@ -473,7 +472,7 @@ void LED_init() {
   //sets the Digital Enabler to 1
   GPIO_PORTF_DEN_R |= 0x00000001;
   //Sets the Data for PORT F to 1
-  GPIO_PORTF_DATA_R |= 0x00000001;
+  GPIO_PORTF_DATA_R &= ~(0x00000001);
 }
 
 // Toggles the LED on the board

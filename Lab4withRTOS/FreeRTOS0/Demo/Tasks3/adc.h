@@ -6,6 +6,7 @@
 void ADCInit();
 void vTaskADC(void *vParameters);
 void vTaskADCAverage(void *vParameters);
-void debugHeight(int dist, int y);
+void printInt(int dist, int y);
+unsigned short int LookupDistanceTable(unsigned short int d);
 
 #endif

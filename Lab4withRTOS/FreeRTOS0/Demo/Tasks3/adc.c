@@ -13,22 +13,23 @@
 #include "task.h"
 #include "semphr.h"
 
-int doAverage = 0; // flag for 4096
 
-unsigned long int avg0, avg1, avg2, avg3;
+unsigned int avg0, avg1, avg2, avg3; // averages
+
+// stores 64 values for avg
+unsigned int values0[64];
+unsigned int values1[64];
+unsigned int values2[64];
+unsigned int values3[64];
 
 // instantaneous distance values
-unsigned long int dist0, dist1, dist2, dist3;
+unsigned int dist0, dist1, dist2, dist3;
 
 // accumulation of the distance values
-unsigned long int total0 = 0;
-unsigned long int total1 = 0;
-unsigned long int total2 = 0;
-unsigned long int total3 = 0;
-
-int i = 0;
-
-xSemaphoreHandle gateKeeper = 0;
+unsigned int total0 = 0;
+unsigned int total1 = 0;
+unsigned int total2 = 0;
+unsigned int total3 = 0;
 
 // initializes the ADC so that the sensor can be used to recieve distances
 void ADCInit() {
@@ -38,76 +39,71 @@ void ADCInit() {
   SYSCTL_RCGC0_R |= 0x10000;
 //  ADC_SSCTL0_R |= 0x2;
   delay(100);
-  ADC0_ACTSS_R = 0x1;
-  gateKeeper = xSemaphoreCreateMutex();
+  ADC0_ACTSS_R = 0xF;
+  ADC_SSMUX0_R |= (0x0 | 0x10 | 0x200 | 0x3000);
+
+  ADC_SAC_R = 0x6;
 }
 
-void vTaskADC(void *vParameters)
-{
+void vTaskADC(void *vParameters) {
 //  xOLEDMessage xMessage;
 //   
 //  volatile unsigned long ul;  
 //  const char *T1Text = "Task 1 is running\n\r";
 //
 //  xMessage.pcMessage = "Bon Jour, Task 1";
-  //int i = 0;  // counter to 4096
+  for (int i = 0; i < 64; i++) {
+    values0[i] = 0;
+    values1[i] = 0;
+    values2[i] = 0;
+    values3[i] = 0;
+  }
+  int i = 0;
   while(1) {
       
-    if (i >= 4096) {
-      //doAverage = 1;
+    if (i >= 64) {
       i = 0;
       //xSemaphoreGive(gateKeeper);
     }
-      
-//    ADC_SSMUX0_R = 0x0;
-//    delay(5);
-//    ADC0_PSSI_R |= 0x1;
-//    delay(5);
-//    dist1 = ADC0_SSFIFO0_R; // ADC 1
-//    
-//    ADC_SSMUX0_R = 0x1;
-//    delay(5);
-//    ADC0_PSSI_R |= 0x1;
-//    delay(5);
-//    dist2 = ADC0_SSFIFO0_R; // ADC 2
-//    
-//    ADC_SSMUX0_R = 0x2;
-//    delay(5);
-//    ADC0_PSSI_R |= 0x1;
-//    delay(5);
-//    dist3 = ADC0_SSFIFO0_R; // ADC 3
-//    
-//    
-//    ADC_SSMUX0_R = 0x3;
-//    delay(5);
-//    ADC0_PSSI_R |= 0x1;
-//    delay(5);
-//    dist0 = ADC0_SSFIFO0_R; // ADC 0
-//    
-//    total0 += dist0;
-//    total1 += dist1;
-//    total2 += dist2;
-//    total3 += dist3;
+    ADC0_PSSI_R |= 0x1;
+    delay(5);
+    dist0 = ADC0_SSFIFO0_R; // ADC 0
     
-//      if (dist0 > 500) {
-//        GPIO_PORTF_DATA_R |= 0x00000001;
-//      } else {
-//        GPIO_PORTF_DATA_R &= ~(0x00000001);
-//      }
-    debugHeight(i, 24);
-//    debugHeight(avg1, 34);
-//    debugHeight(avg2, 44);
-//    debugHeight(avg3, 54);
+    dist1 = ADC0_SSFIFO0_R; // ADC 1
+    
+    dist2 = ADC0_SSFIFO0_R; // ADC 2
+    
+    dist3 = ADC0_SSFIFO0_R; // ADC 3
+    
+    total0 -= values0[i];
+    values0[i] = dist0;
+    total0 += values0[i];
+    
+    total1 -= values1[i];
+    values1[i] = dist1;
+    total1 += values1[i];
+    
+    total2 -= values2[i];
+    values2[i] = dist2;
+    total2 += values2[i];
+    
+    total3 -= values3[i];
+    values3[i] = dist3;
+    total3 += values3[i];
+    
+//    printInt(dist0, 24);
+//    printInt(dist1, 34);
+//    printInt(dist2, 44);
+//    printInt(dist3, 54);
+    
     i++;
-    //Send the message to the OLED gatekeeper for display.
-    //xQueueSend( xOLEDQueue, &xMessage, 0 );
-    
+    vTaskDelay(8);
   }
 }
 
 // A method used to debug our code. We pass in the distance value read from the sensor and print it
 // out to the OLED screen
-void debugHeight(int dist, int y){
+void printInt(int dist, int y){
   int value = dist;
   char myData[6];
   int a = value/1000;
@@ -122,22 +118,33 @@ void debugHeight(int dist, int y){
 
   // prints to the OLED
   RIT128x96x4StringDraw(myData, 30, y, 15);
+}
 
+unsigned short int LookupDistanceTable(unsigned short int d) {
+  int dis = d << 6;
+  if (dis <= 0x2222) {
+    return 800;
+  } else if (dis >= 0xFFC0) {
+    return 70;
+  } else {
+    dis *= -730;
+    dis /= 56734;
+    dis += 913;
+    return dis;
+  }
 }
 
 void vTaskADCAverage(void *vParameters) {
-  
   while(1) {
-    if (xSemaphoreTake(gateKeeper, 1)) {
-      avg0 = total0 / 1000;
-      avg1 = total1 / 1000;
-      avg2 = total2 / 1000;
-      avg3 = total3 / 1000;
-      doAverage = 0;
-      total0 = 0;
-      total1 = 0;
-      total2 = 0;
-      total3 = 0;
-    }
+    LED_toggle();
+    avg0 = total0 / 64;
+    avg1 = total1 / 64;
+    avg2 = total2 / 64;
+    avg3 = total3 / 64;
+    printInt(LookupDistanceTable(avg0), 24);
+    printInt(LookupDistanceTable(avg1), 34);
+    printInt(LookupDistanceTable(avg2), 44);
+    printInt(LookupDistanceTable(avg3), 54);
+    vTaskDelay(500);
   }
 }

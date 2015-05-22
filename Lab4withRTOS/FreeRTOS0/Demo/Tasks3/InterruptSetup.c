@@ -101,7 +101,7 @@ void GPIOEventHandler(){
   // setting the debounce flag = 1 if i was 1000, else debounce is 0. meaning the key press was not valid.
   if(i == 1000){
     debounce = 1;
-    LED_toggle();
+    //LED_toggle();
   }else{
     debounce = 0;
   }
