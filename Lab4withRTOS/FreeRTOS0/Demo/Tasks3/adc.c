@@ -31,6 +31,74 @@ unsigned int total1 = 0;
 unsigned int total2 = 0;
 unsigned int total3 = 0;
 
+
+//sets up the PWM
+void PWMinit() {
+  GPIO_PORTF_DEN_R |= 0x00000001;
+  SYSCTL_RCGC0_R |= 0x00100000;
+  delay(50);
+  SYSCTL_RCGC2_R |= 0x00000060;
+  delay(50);
+  SYSCTL_RCC_R |= 0x100000;
+  delay(50);
+  SYSCTL_RCC_R &= ~(0xE0000);
+  delay(50);
+  GPIO_PORTF_AFSEL_R = 0x1;
+  GPIO_PORTG_AFSEL_R = 0x2;
+  GPIO_PORTG_DEN_R |= 0x2;
+  PWM_0_CTL_R = 0x00000000;
+  PWM_0_GENA_R = 0x0000008C;
+  PWM_0_GENB_R = 0x0000080C;
+  
+  PWM_0_LOAD_R = 0x0000018F;
+  PWM_0_CMPA_R = 0x0000012B;
+  PWM_0_CMPB_R = 0x00000063;
+  PWM_0_CTL_R = 0x00000001;
+  PWM_ENABLE_R = 0x00000003;
+
+  
+  //setting up PWM2 and PWM3
+
+  SYSCTL_RCGC2_R |= 0x2;
+  delay(50);
+  SYSCTL_RCC_R |= 0x100000;
+  delay(50);
+  SYSCTL_RCC_R &= ~(0xE0000);
+  delay(50); 
+  GPIO_PORTB_DEN_R |= 0x3;
+  GPIO_PORTB_AFSEL_R |= 0x3;
+  PWM_1_CTL_R = 0x00000000;
+  PWM_1_GENA_R = 0x0000008C;
+  PWM_1_GENB_R = 0x0000080C;
+  
+  PWM_1_LOAD_R = 100000;
+  //PWM_1_LOAD_R = 0x0000018F;
+  //PWM_1_CMPA_R = 0x0000012B;
+  PWM_1_CMPA_R = 0x00000063;
+  PWM_1_CMPB_R = 0x00000063;
+  PWM_1_CTL_R = 0x00000001;
+  PWM_ENABLE_R |= 0xC; 
+}
+
+void PORTD_init(){
+   SYSCTL_RCGC2_R |= 0x8;
+  //delays for about 1/80th of a second
+  delay(100);
+  //LED is at pin 0
+  //sets the direction bit for LED to 1 so it can write
+  //which enables it to display the light
+  GPIO_PORTD_DIR_R |= 0x000000F8;
+  //sets the alternate function select to 0 to turn it off
+  GPIO_PORTD_AFSEL_R &= 0x000000F8;
+  //sets the Digital Enabler to 1
+  GPIO_PORTD_DEN_R |= 0x000000F8;
+  //Sets the Data for PORT A to 1
+  //GPIO_PORTD_DATA_R |= (0x000000F8);
+  GPIO_PORTD_DATA_R &= 0;
+  GPIO_PORTD_DATA_R |= 0xD0;
+}
+
+
 // initializes the ADC so that the sensor can be used to recieve distances
 void ADCInit() {
   // enables ADC0

@@ -10,5 +10,4 @@ void init_GPIOE();
 void init_GPIOF();
 void GPIOEventHandler();
 extern int getDebounce();
-
 #endif

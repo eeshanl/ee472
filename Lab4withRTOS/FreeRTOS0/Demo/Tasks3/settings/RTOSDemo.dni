@@ -16,7 +16,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-813017744
+Checksum=29035394
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -43,6 +43,12 @@ LMI_ResetMode=0x00000000
 ShowArgs=0
 [Disassembly]
 MixedMode=1
+[DriverProfiling]
+Enabled=0
+Mode=0
+Graph=0
+Symbiont=0
+Exclusions=
 [Disassemble mode]
 mode=1
 [Breakpoints]
@@ -58,9 +64,3 @@ LogFile=_ ""
 [Aliases]
 Count=0
 SuppressDialog=0
-[DriverProfiling]
-Enabled=0
-Mode=0
-Graph=0
-Symbiont=0
-Exclusions=

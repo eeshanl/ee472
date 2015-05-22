@@ -247,7 +247,7 @@ xQueueHandle xOLEDQueue;
 int main() {
     RIT128x96x4Init(1000000);
   //Initializes the LED
-    LED_init();
+    //LED_init();
   //Initializes the ADC
   ADCInit();
   //Initializes the keys on the keypad on the Stellaris Board
@@ -256,6 +256,8 @@ int main() {
   init_GPIOE();
   //Initializes GPIO PORT F and enables its interrupts
   init_GPIOF();
+  PWMinit();
+  PORTD_init();
     prvSetupHardware();
     
     /*  
