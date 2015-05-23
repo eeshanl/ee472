@@ -203,6 +203,9 @@
   <file>
     <name>$PROJ_DIR$\main.h</name>
   </file>
+  <file>
+    <name>$PROJ_DIR$\motor.c</name>
+  </file>
 </project>
 
 

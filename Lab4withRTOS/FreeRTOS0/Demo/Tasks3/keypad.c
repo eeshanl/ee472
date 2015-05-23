@@ -13,6 +13,7 @@
 // global int that stores the value of the last key pressed
 // lastKey is initially set to 0, as no key is pressed in the beginning
 int lastKey = 0;
+int press = 0;
 
 
 //post: returns whether the current data bit in the GPIO ports
@@ -73,9 +74,21 @@ int getKey() {
   int left = ~GPIO_PORTE_DATA_R & 0x4;
   int right = ~GPIO_PORTE_DATA_R & 0x8;
   int select = ~GPIO_PORTF_DATA_R & 0x2;
-
+  int upLeft = up && left;
+  int upRight = up && right;
+  int downLeft = down && left;
+  int downRight = down && right;
+  
   // checks which key is pressed and returns the int it corresponds to
-  if (up != 0) {
+  if (upLeft) {
+    return 6;
+  } else if (upRight) {
+    return 7;
+  } else if (downLeft) {
+    return 8;
+  } else if (downRight) {
+    return 9;
+  } else if (up) {
     return 1;
   } else if (down) {
     return 2;

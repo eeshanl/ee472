@@ -136,7 +136,7 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 #include "adc.h"
 #include "keypad.h"
 #include "InterruptSetup.h"
-
+#include "motor.h"
 
 
 /*-----------------------------------------------------------*/
@@ -292,8 +292,10 @@ int main() {
     
     //xTaskCreate( vOLEDTask, ( signed portCHAR * ) "OLED", mainOLED_TASK_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 
-    xTaskCreate(vTaskADC, "Task ADC", 100,NULL, 1,NULL);
-    xTaskCreate(vTaskADCAverage, "Task Average", 100,NULL, 1,NULL);
+    xTaskCreate(vTaskADC, "Task ADC", 100, NULL, 1, NULL);
+    xTaskCreate(vTaskADCAverage, "Task Average", 100, NULL, 1, NULL);
+    xTaskCreate(vTaskControlMotor, "Task Control Motor", 100, NULL, 1, NULL);
+    xTaskCreate(vTaskSpeaker, "Task Control Motor", 100, NULL, 1, NULL);
 //    xTaskCreate(vTask3, "Task 3", 100,NULL, 3,NULL);
     
     /* 

@@ -8,7 +8,6 @@ void vTaskADC(void *vParameters);
 void vTaskADCAverage(void *vParameters);
 void printInt(int dist, int y);
 unsigned short int LookupDistanceTable(unsigned short int d);
-void PWMinit();
-void PORTD_init();
+
 
 #endif

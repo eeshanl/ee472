@@ -16,7 +16,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=29035394
+Checksum=1866427348
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -25,8 +25,8 @@ Enabled=_ 0
 [CallStackLog]
 Enabled=0
 [LMIFTDI]
-LMIFTDIserialNo=06100042A
-LMIFTDIfoundProbes=
+LMIFTDIserialNo=06100040A
+LMIFTDIfoundProbes=06100040A:FF:
 [Stack]
 FillEnabled=0
 OverflowWarningsEnabled=1
@@ -58,9 +58,9 @@ Count=1
 LoggingEnabled=_ 0
 LogFile=_ ""
 Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Aliases]
 Count=0
 SuppressDialog=0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""

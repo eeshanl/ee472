@@ -9,5 +9,4 @@ int fresh_key();
 int keymaster();
 int getKey();
 
-
 #endif
