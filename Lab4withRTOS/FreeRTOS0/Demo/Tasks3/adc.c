@@ -38,16 +38,16 @@ void ADCInit() {
   SYSCTL_RCGC0_R = 0x0;
   delay(100);
   SYSCTL_RCGC0_R |= 0x10000;
-//  ADC_SSCTL0_R |= 0x2;
+  //  ADC_SSCTL0_R |= 0x2;
   delay(100);
   ADC0_ACTSS_R = 0xF;
   ADC_SSMUX0_R |= (0x0 | 0x10 | 0x200 | 0x3000);
-
+  
   ADC_SAC_R = 0x6;
 }
 
 void vTaskADC(void *vParameters) {
-
+  
   for (int i = 0; i < 64; i++) {
     values0[i] = 0;
     values1[i] = 0;
@@ -56,7 +56,7 @@ void vTaskADC(void *vParameters) {
   }
   int i = 0;
   while(1) {
-      
+    
     if (i >= 64) {
       i = 0;
     }
@@ -85,7 +85,7 @@ void vTaskADC(void *vParameters) {
     total3 -= values3[i];
     values3[i] = dist3;
     total3 += values3[i];
- 
+    
     i++;
     vTaskDelay(8);
   }
@@ -105,7 +105,7 @@ void printInt(int dist, int x, int y){
   myData[2] = c + '0';
   myData[3] = d + '0';
   myData[4] = '\0';
-
+  
   // prints to the OLED
   RIT128x96x4StringDraw(myData, x, y, 15);
 }

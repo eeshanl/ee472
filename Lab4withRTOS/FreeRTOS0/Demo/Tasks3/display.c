@@ -2,6 +2,7 @@
 #include "main.h"
 #include "motor.h"
 #include "keypad.h"
+#include "display.h"
 
 #include "inc/lm3s8962.h"
 #include "drivers/rit128x96x4.h"
@@ -23,9 +24,7 @@ int pastKey = -1;
 int fast = 0;
 
 void vTaskDisplay(void *vParameters) {
-
-  while(1) {   
-    //RIT128x96x4Clear();
+  while(1) {
     if (pastKey != currentKey) {
       pastKey = currentKey;
       int newState;
@@ -69,10 +68,10 @@ void vTaskDisplay(void *vParameters) {
           GPIO_PORTD_DATA_R &= ~(0x40);
         }
       } else if(state == 6){
-          if (currentKey == 5) {
-            state = 2;
-            GPIO_PORTD_DATA_R &= ~(0x40);
-          }
+        if (currentKey == 5) {
+          state = 2;
+          GPIO_PORTD_DATA_R &= ~(0x40);
+        }
       } else{
         state = 5;
       }
@@ -82,7 +81,7 @@ void vTaskDisplay(void *vParameters) {
       } else {
         newState = 0;
       }
-
+      
       if (newState) {
         RIT128x96x4Clear();
         if (state == 1) {
@@ -94,61 +93,57 @@ void vTaskDisplay(void *vParameters) {
           RIT128x96x4StringDraw("Ruchira Kulkarni\0", 10, 50, 15);
         } else if (state == 2) {
           RIT128x96x4Clear();
-          RIT128x96x4StringDraw("Mode Selection:\0", 25, 0, 15);
-          RIT128x96x4StringDraw("Press SEL to choose\0", 10, 10, 15);
-          RIT128x96x4StringDraw(">\0", 0, 40, 15);
-          RIT128x96x4StringDraw("Manual Mode\0", 15, 40, 15);
-          RIT128x96x4StringDraw("Autonomous Mode\0", 15, 60, 15);
+          printState2Or3(40);
         } else if (state == 3) {
           RIT128x96x4Clear();
-          RIT128x96x4StringDraw("Mode Selection:\0", 25, 0, 15);
-          RIT128x96x4StringDraw("Press SEL to choose\0", 10, 10, 15);
-          RIT128x96x4StringDraw(">\0", 0, 60, 15);
-          RIT128x96x4StringDraw("Manual Mode\0", 15, 40, 15);
-          RIT128x96x4StringDraw("Autonomous Mode\0", 15, 60, 15);
+          printState2Or3(60);
         } else if(state == 4){
           RIT128x96x4Clear();
           RIT128x96x4StringDraw("Press up for 1\0", 30, 0, 15);
-          RIT128x96x4StringDraw("1. Faster\0", 30, 34, 15);
+            RIT128x96x4StringDraw("1. Faster\0", 30, 34, 15);
           RIT128x96x4StringDraw("2. Slower\0", 30, 44, 15);
           RIT128x96x4StringDraw("Press down for 2\0", 30, 14, 15);
-        } else if (state == 6) {
-          RIT128x96x4Clear();
-          RIT128x96x4StringDraw("Manual Mode \0", 33, 0, 15);
-          RIT128x96x4StringDraw("ADC 0:\0", 30, 24, 15);
-          RIT128x96x4StringDraw("ADC 1:\0", 30, 34, 15);
-          RIT128x96x4StringDraw("ADC 2:\0", 30, 44, 15);
-          RIT128x96x4StringDraw("ADC 3:\0", 30, 54, 15);
-          RIT128x96x4StringDraw("Press SEL to exit\0", 15, 74, 15);
-        } else if (state == 5) {
-          RIT128x96x4Clear();
-          RIT128x96x4StringDraw("Autonomous Mode\0", 23, 0, 15);
-          RIT128x96x4StringDraw("ADC 0:\0", 30, 24, 15);
-          RIT128x96x4StringDraw("ADC 1:\0", 30, 34, 15);
-          RIT128x96x4StringDraw("ADC 2:\0", 30, 44, 15);
-          RIT128x96x4StringDraw("ADC 3:\0", 30, 54, 15);
-          RIT128x96x4StringDraw("Press SEL to exit\0", 15, 74, 15);
+          } else if (state == 6) {
+            RIT128x96x4Clear();
+            RIT128x96x4StringDraw("Manual Mode \0", 33, 0, 15);
+            printADCString();
+          } else if (state == 5) {
+            RIT128x96x4Clear();
+            RIT128x96x4StringDraw("Autonomous Mode\0", 23, 0, 15);
+            printADCString();
+            
+          }
         }
-        
-        
       }
+      vTaskDelay(10);
     }
-    vTaskDelay(10);      
   }
-}
-
-
-
-
-void vPrintDistance(void *vParameters) {
-  while(1) {
-    if (state == 6 || state == 5) {
-      printInt(LookupDistanceTable(dist0), 70, 24);
-      printInt(LookupDistanceTable(dist1), 70, 34);
-      printInt(LookupDistanceTable(dist2), 70, 44);
-      printInt(LookupDistanceTable(dist3), 70, 54);
+  
+  void printState2Or3(int y) {
+    RIT128x96x4StringDraw("Mode Selection:\0", 25, 0, 15);
+    RIT128x96x4StringDraw("Press SEL to choose\0", 10, 10, 15);
+    RIT128x96x4StringDraw(">\0", 0, y, 15);
+    RIT128x96x4StringDraw("Manual Mode\0", 15, 40, 15);
+    RIT128x96x4StringDraw("Autonomous Mode\0", 15, 60, 15);
+  }
+  
+  
+  void printADCString() {
+    RIT128x96x4StringDraw("ADC 0:\0", 30, 24, 15);
+    RIT128x96x4StringDraw("ADC 1:\0", 30, 34, 15);
+    RIT128x96x4StringDraw("ADC 2:\0", 30, 44, 15);
+    RIT128x96x4StringDraw("ADC 3:\0", 30, 54, 15);
+    RIT128x96x4StringDraw("Press SEL to exit\0", 15, 74, 15);
+  }
+  
+  void vPrintDistance(void *vParameters) {
+    while(1) {
+      if (state == 6 || state == 5) {
+        printInt(LookupDistanceTable(dist0), 70, 24);
+        printInt(LookupDistanceTable(dist1), 70, 34);
+        printInt(LookupDistanceTable(dist2), 70, 44);
+        printInt(LookupDistanceTable(dist3), 70, 54);
+      }
+      vTaskDelay(50);
     }
-    vTaskDelay(50);
   }
-}
-
