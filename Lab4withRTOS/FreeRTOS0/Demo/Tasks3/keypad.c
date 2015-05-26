@@ -78,9 +78,13 @@ int getKey() {
   int upRight = up && right;
   int downLeft = down && left;
   int downRight = down && right;
+  int upDown = up && down;
+  int leftRight = left && right;
   
   // checks which key is pressed and returns the int it corresponds to
-  if (upLeft) {
+  if (upDown || leftRight) {
+    return 0;
+  } else if (upLeft) {
     return 6;
   } else if (upRight) {
     return 7;

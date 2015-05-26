@@ -14,7 +14,7 @@
 #include "semphr.h"
 
 #include "keypad.h"
-
+//#include "globals.h"
 
 unsigned int avg0, avg1, avg2, avg3; // averages
 
@@ -33,8 +33,6 @@ unsigned int total1 = 0;
 unsigned int total2 = 0;
 unsigned int total3 = 0;
 
-
-
 // initializes the ADC so that the sensor can be used to recieve distances
 void ADCInit() {
   // enables ADC0
@@ -50,12 +48,7 @@ void ADCInit() {
 }
 
 void vTaskADC(void *vParameters) {
-//  xOLEDMessage xMessage;
-//   
-//  volatile unsigned long ul;  
-//  const char *T1Text = "Task 1 is running\n\r";
-//
-//  xMessage.pcMessage = "Bon Jour, Task 1";
+
   for (int i = 0; i < 64; i++) {
     values0[i] = 0;
     values1[i] = 0;
@@ -107,9 +100,9 @@ void vTaskADC(void *vParameters) {
 
 // A method used to debug our code. We pass in the distance value read from the sensor and print it
 // out to the OLED screen
-void printInt(int dist, int y){
+void printInt(int dist, int x, int y){
   int value = dist;
-  char myData[6];
+  char myData[5];
   int a = value/1000;
   int b = (value%1000)/100;
   int c = (value%1000%100)/10;
@@ -121,7 +114,7 @@ void printInt(int dist, int y){
   myData[4] = '\0';
 
   // prints to the OLED
-  RIT128x96x4StringDraw(myData, 30, y, 15);
+  RIT128x96x4StringDraw(myData, x, y, 15);
 }
 
 unsigned short int LookupDistanceTable(unsigned short int d) {
@@ -145,10 +138,10 @@ void vTaskADCAverage(void *vParameters) {
     avg1 = total1 / 64;
     avg2 = total2 / 64;
     avg3 = total3 / 64;
-    printInt(LookupDistanceTable(avg0), 24);
-    printInt(LookupDistanceTable(avg1), 34);
-    printInt(LookupDistanceTable(avg2), 44);
-    printInt(LookupDistanceTable(avg3), 54);
+//    printInt(LookupDistanceTable(avg0), 24);
+//    printInt(LookupDistanceTable(avg1), 34);
+//    printInt(LookupDistanceTable(avg2), 44);
+//    printInt(LookupDistanceTable(avg3), 54);
     vTaskDelay(500);
   }
 }

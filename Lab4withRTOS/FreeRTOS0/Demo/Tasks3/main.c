@@ -137,6 +137,7 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 #include "keypad.h"
 #include "InterruptSetup.h"
 #include "motor.h"
+#include "display.h"
 
 
 /*-----------------------------------------------------------*/
@@ -245,21 +246,8 @@ xQueueHandle xOLEDQueue;
  *************************************************************************/
 
 int main() {
-    RIT128x96x4Init(1000000);
-  //Initializes the LED
-    //LED_init();
-  //Initializes the ADC
-  ADCInit();
-  //Initializes the keys on the keypad on the Stellaris Board
-  key_init();
-  //Initializes GPIO PORT E and enables its interrupts
-  init_GPIOE();
-  //Initializes GPIO PORT F and enables its interrupts
-  init_GPIOF();
-  PWMinit();
-  PORTD_init();
-    prvSetupHardware();
     
+    InitializeHardware();
     /*  
         Create the queue used by the OLED task.  Messages for display on the OLED
         are received via this queue. 
@@ -288,15 +276,18 @@ int main() {
     
     
     
+    
     /* Start the tasks */
     
     //xTaskCreate( vOLEDTask, ( signed portCHAR * ) "OLED", mainOLED_TASK_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 
-    xTaskCreate(vTaskADC, "Task ADC", 100, NULL, 1, NULL);
-    xTaskCreate(vTaskADCAverage, "Task Average", 100, NULL, 1, NULL);
-    xTaskCreate(vTaskControlMotor, "Task Control Motor", 100, NULL, 1, NULL);
+    xTaskCreate(vTaskADC, "Task ADC", 100, NULL, 2, NULL);
+    xTaskCreate(vTaskADCAverage, "Task Average", 100, NULL, 2, NULL);
+    xTaskCreate(vTaskControlMotor, "Task Control Motor", 100, NULL, 2, NULL);
     xTaskCreate(vTaskSpeaker, "Task Control Motor", 100, NULL, 1, NULL);
-//    xTaskCreate(vTask3, "Task 3", 100,NULL, 3,NULL);
+    xTaskCreate(vTaskDisplay, "Task OLED Display", 100, NULL, 3, NULL);
+    xTaskCreate(vPrintDistance, "Task Distance Please", 100, NULL, 2, NULL);
+    //xTaskCreate(vTask3, "Task 3", 100,NULL, 3,NULL);
     
     /* 
       Configure the high frequency interrupt used to measure the interrupt
@@ -315,6 +306,27 @@ int main() {
     
     return 0;
 }
+
+
+void InitializeHardware() {
+  RIT128x96x4Init(1000000);
+  //Initializes the LED
+    //LED_init();
+  //Initializes the ADC
+  ADCInit();
+  //Initializes the keys on the keypad on the Stellaris Board
+  key_init();
+  //Initializes GPIO PORT E and enables its interrupts
+  init_GPIOE();
+  //Initializes GPIO PORT F and enables its interrupts
+  init_GPIOF();
+  PWMinit();
+  PORTD_init();
+  prvSetupHardware();
+   speakerInit();
+}
+
+
 
 /*
   three dummy tasks

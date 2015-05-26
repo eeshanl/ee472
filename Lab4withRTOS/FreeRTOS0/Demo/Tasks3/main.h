@@ -4,5 +4,5 @@
 void delay(unsigned long aValue);
 void LED_init();
 void LED_toggle();
-
+void InitializeHardware();
 #endif

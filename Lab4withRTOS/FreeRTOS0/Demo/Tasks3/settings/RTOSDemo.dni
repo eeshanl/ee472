@@ -16,7 +16,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=1866427348
+Checksum=-637766131
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -26,7 +26,7 @@ Enabled=_ 0
 Enabled=0
 [LMIFTDI]
 LMIFTDIserialNo=06100040A
-LMIFTDIfoundProbes=06100040A:FF:
+LMIFTDIfoundProbes=
 [Stack]
 FillEnabled=0
 OverflowWarningsEnabled=1
@@ -43,12 +43,6 @@ LMI_ResetMode=0x00000000
 ShowArgs=0
 [Disassembly]
 MixedMode=1
-[DriverProfiling]
-Enabled=0
-Mode=0
-Graph=0
-Symbiont=0
-Exclusions=
 [Disassemble mode]
 mode=1
 [Breakpoints]
@@ -58,9 +52,15 @@ Count=1
 LoggingEnabled=_ 0
 LogFile=_ ""
 Category=_ 0
-[Aliases]
-Count=0
-SuppressDialog=0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
+[Aliases]
+Count=0
+SuppressDialog=0
+[DriverProfiling]
+Enabled=0
+Mode=0
+Graph=0
+Symbiont=0
+Exclusions=

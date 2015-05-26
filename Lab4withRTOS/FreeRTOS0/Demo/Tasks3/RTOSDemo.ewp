@@ -1059,6 +1059,9 @@
     <name>$PROJ_DIR$\adc.h</name>
   </file>
   <file>
+    <name>$PROJ_DIR$\display.c</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\InterruptSetup.c</name>
   </file>
   <file>

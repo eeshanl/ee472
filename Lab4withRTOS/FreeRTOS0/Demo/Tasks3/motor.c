@@ -19,11 +19,12 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
-#include "semphr.h"
-
+#include "motor.h"
 #include "keypad.h"
+#include "display.h"
 
-
+int currentKey;
+unsigned long ulPeriod;
 //sets up the PWM
 void PWMinit() {
   GPIO_PORTF_DEN_R |= 0x00000001;
@@ -47,7 +48,6 @@ void PWMinit() {
   PWM_0_CMPB_R = 0x00000063;
   PWM_0_CTL_R = 0x00000001;
   PWM_ENABLE_R = 0x00000003;
-
   
   //setting up PWM2 and PWM3
 
@@ -65,9 +65,10 @@ void PWMinit() {
   
   PWM_1_LOAD_R = 0xFFFF;
   //PWM_1_LOAD_R = 0x0000018F;
-  PWM_1_CMPA_R = 0x0000012B;
-  //PWM_1_CMPA_R = 0x00000001;
-  PWM_1_CMPB_R = 0x0000012B;
+  //PWM_1_CMPA_R = 0x0000012B;
+  PWM_1_CMPA_R = 0xFFFFF;
+  PWM_1_CMPB_R = 0xFFFFF;
+  //PWM_1_CMPB_R = 0x0000012B;    
   PWM_1_CTL_R = 0x00000001;
   PWM_ENABLE_R |= 0xC; 
 }
@@ -90,52 +91,138 @@ void PORTD_init(){
   //GPIO_PORTD_DATA_R |= 0xD0;
 }
 
+
+//VALUE FOR WHICH THE CMPA and CMPB TURNS OFF : 0xFFFD
+
 void vTaskControlMotor(void *vParameters) {
   while(1) {
-    int press = keymaster();
+    currentKey = keymaster();
     
-    if (press == 1) {
-      GPIO_PORTD_DATA_R = 0x68;
-    } else if (press == 2) {
-      GPIO_PORTD_DATA_R = 0xD0;
-    } else if (press == 3) {
-      GPIO_PORTD_DATA_R = 0x48;
-    } else if (press == 4) {
-      GPIO_PORTD_DATA_R = 0x60;
-    } else {
-      GPIO_PORTD_DATA_R &= ~(0x40);
-    }
-      //    else if (press == 2) {
-//      
-//    } else if (press == 3) {
-//      
-//    } else if (press == 4) {
-//      
-//    } else {
-//      
-//    }
+    if (currentKey == 1) {
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0x28; //00101000
+      goForward();
+    } else if (currentKey == 2) {
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0x90; //10010000
+      goBackWard();
+    } else if (currentKey == 3) {
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0xA0; //10100000
+      PWM_1_CMPA_R = 0xFFFF; 
+    } else if (currentKey == 4) {
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0x18; // 00011000
+      PWM_1_CMPB_R = 0xFFF;
+    } else if(currentKey == 6){ //upleft
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0x28;
+      goUpLeft();  
+    } else if(currentKey == 7){
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0x28; //01101000
+      goUpRight(); 
+   } else if(currentKey == 8){
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0x90; 
+      goBackLeft();
+   } else if(currentKey == 9){
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0x90;
+      goBackRight();
+   } else {
+      GPIO_PORTD_DATA_R &= 0x40;
+      GPIO_PORTD_DATA_R |= 0xB8;
+      //PWM_1_CMPA_R = 0xFFFF; 
+      //PWM_1_CMPB_R = 0xFFF;
+   }
     
-    vTaskDelay(100);
+    vTaskDelay(20);
+  }
+}
+
+//OK
+void goForward(){
+  if(!fast){
+   PWM_1_CMPA_R = 0x14FF; 
+   PWM_1_CMPB_R = 0xFFF;
+  }else{
+    PWM_1_CMPA_R = 0x14FF; 
+    PWM_1_CMPB_R = 0xFFF;
+  }
+}
+
+//OK
+void goBackWard(){
+  if(!fast){
+   PWM_1_CMPA_R = 0xFFF; 
+   PWM_1_CMPB_R = 0xFFF;
+  }else{
+    PWM_1_CMPA_R = 0xFFF; 
+    PWM_1_CMPB_R = 0xFFF;
+  }
+}
+
+//OK
+//CMPA ==> RIGHT MOTOR
+//CMPB ==> LEFT MOTOR
+void goUpLeft(){
+  // PWM_1_LOAD_R = 0xFFFF;
+  //CMP determines the speed of the motor
+  if(!fast){  
+    PWM_1_CMPA_R = 0xFF; 
+    PWM_1_CMPB_R = 0xFFF;
+  }else{
+    PWM_1_CMPA_R = 0xFF; 
+    PWM_1_CMPB_R = 0xFFF;
+  }
+}
+
+//OK
+void goBackLeft(){
+  if(!fast){
+    PWM_1_CMPA_R = 0xFF; //100101011
+    PWM_1_CMPB_R = 0x1FFF;
+  }else{ 
+    PWM_1_CMPA_R = 0xFF; //100101011
+    PWM_1_CMPB_R = 0x1FFF;
+  }
+}
+
+// OK 
+void goUpRight(){
+  if(!fast){
+   PWM_1_CMPA_R = 0x1FFF; 
+   PWM_1_CMPB_R = 0xFF;
+  }else{
+      PWM_1_CMPA_R = 0x1FFF; 
+      PWM_1_CMPB_R = 0xFF;
+  }
+}
+
+// OK
+void goBackRight(){
+  if(!fast){ 
+    PWM_1_CMPA_R = 0x1FFF; 
+    PWM_1_CMPB_R = 0xFF;
+  }else{
+     PWM_1_CMPA_R = 0x1FFF; 
+    PWM_1_CMPB_R = 0xFF;
   }
 }
 
 
-
-
-
-
-void vTaskSpeaker(void *vParameters) {
-  
-  
-  
-  //Set GPIO Port: G Enabled
+void speakerInit(){
+   SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM);
+    //Set GPIO Port: G Enabled
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
    
+    
     //Tell Port G, Pin 1, to take input from PWM 0
     GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_1);
-   
+    
     //Set a 440 Hz frequency as u1Period
-    unsigned long ulPeriod = SysCtlClockGet() / 440;
+    ulPeriod = SysCtlClockGet() / (4440);
    
     //Configure PWM0 in up-down count mode, no sync to clock
     PWMGenConfigure(PWM0_BASE, PWM_GEN_0,
@@ -148,21 +235,21 @@ void vTaskSpeaker(void *vParameters) {
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, ulPeriod / 16);
 
     //Activate PWM0
-    PWMGenEnable(PWM0_BASE, PWM_GEN_0);   
-   
-  
-  
-  
+    PWMGenEnable(PWM0_BASE, PWM_GEN_0);     
+}
+
+
+void vTaskSpeaker(void *vParameters) {  
   while(1) {
+    if((state == 5 || state == 6) && (dist0 > 900 || dist1 > 900 || dist2 > 900 || dist3 > 900)){
       PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod);
       PWMOutputState(PWM0_BASE, PWM_OUT_1_BIT, true);
       delay(100);
       PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod*2);
-      delay(100);
+      //delay(100);
+    }else{
       PWMOutputState(PWM0_BASE, PWM_OUT_1_BIT, false);
-      delay(100);
-      
-      
-      vTaskDelay(100);
+    }
+    vTaskDelay(10);
   }
 }
