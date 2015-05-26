@@ -9,5 +9,6 @@ unsigned long int getTimer1();
 void init_GPIOE();
 void init_GPIOF();
 void GPIOEventHandler();
-extern int getDebounce();
+extern int debounce;
+
 #endif

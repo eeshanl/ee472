@@ -17,13 +17,11 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
-#include "semphr.h"
 
 int state = 0;
 int pastKey = -1;
-int printADC = 0;
-xSemaphoreHandle gateKeeper = 0;
 int fast = 0;
+
 void vTaskDisplay(void *vParameters) {
 
   while(1) {   
@@ -58,11 +56,11 @@ void vTaskDisplay(void *vParameters) {
           fast = 1;
           state = 6;
           GPIO_PORTD_DATA_R = 0x40;
-        }else if(currentKey == 2){
+        } else if(currentKey == 2){
           fast = 0;
           state = 6;
           GPIO_PORTD_DATA_R = 0x40;
-        }else{
+        } else{
           state = 4;
         }
       } else if (state == 5) {
@@ -70,14 +68,13 @@ void vTaskDisplay(void *vParameters) {
           state = 2;
           GPIO_PORTD_DATA_R &= ~(0x40);
         }
-      }else if(state == 6){
+      } else if(state == 6){
           if (currentKey == 5) {
             state = 2;
             GPIO_PORTD_DATA_R &= ~(0x40);
           }
-      }else{
-            state = 5;
-        
+      } else{
+        state = 5;
       }
       
       if(prev != state) {
@@ -86,7 +83,6 @@ void vTaskDisplay(void *vParameters) {
         newState = 0;
       }
 
-      
       if (newState) {
         RIT128x96x4Clear();
         if (state == 1) {
@@ -96,7 +92,6 @@ void vTaskDisplay(void *vParameters) {
           RIT128x96x4StringDraw("Denny Ly\0", 10, 30, 15);
           RIT128x96x4StringDraw("Eeshan Londhe\0", 10, 40, 15);
           RIT128x96x4StringDraw("Ruchira Kulkarni\0", 10, 50, 15);
-          //printADC = 0;
         } else if (state == 2) {
           RIT128x96x4Clear();
           RIT128x96x4StringDraw("Mode Selection:\0", 25, 0, 15);
@@ -104,7 +99,6 @@ void vTaskDisplay(void *vParameters) {
           RIT128x96x4StringDraw(">\0", 0, 40, 15);
           RIT128x96x4StringDraw("Manual Mode\0", 15, 40, 15);
           RIT128x96x4StringDraw("Autonomous Mode\0", 15, 60, 15);
-          //printADC = 0;
         } else if (state == 3) {
           RIT128x96x4Clear();
           RIT128x96x4StringDraw("Mode Selection:\0", 25, 0, 15);
@@ -112,7 +106,6 @@ void vTaskDisplay(void *vParameters) {
           RIT128x96x4StringDraw(">\0", 0, 60, 15);
           RIT128x96x4StringDraw("Manual Mode\0", 15, 40, 15);
           RIT128x96x4StringDraw("Autonomous Mode\0", 15, 60, 15);
-          //printADC = 0;
         } else if(state == 4){
           RIT128x96x4Clear();
           RIT128x96x4StringDraw("Press up for 1\0", 30, 0, 15);
@@ -127,7 +120,6 @@ void vTaskDisplay(void *vParameters) {
           RIT128x96x4StringDraw("ADC 2:\0", 30, 44, 15);
           RIT128x96x4StringDraw("ADC 3:\0", 30, 54, 15);
           RIT128x96x4StringDraw("Press SEL to exit\0", 15, 74, 15);
-         // printADC = 1;
         } else if (state == 5) {
           RIT128x96x4Clear();
           RIT128x96x4StringDraw("Autonomous Mode\0", 23, 0, 15);
@@ -136,13 +128,12 @@ void vTaskDisplay(void *vParameters) {
           RIT128x96x4StringDraw("ADC 2:\0", 30, 44, 15);
           RIT128x96x4StringDraw("ADC 3:\0", 30, 54, 15);
           RIT128x96x4StringDraw("Press SEL to exit\0", 15, 74, 15);
-          //printADC = 1;
         }
         
         
       }
     }
-    vTaskDelay(100);      
+    vTaskDelay(10);      
   }
 }
 

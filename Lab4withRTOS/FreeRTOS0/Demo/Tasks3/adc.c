@@ -14,7 +14,6 @@
 #include "semphr.h"
 
 #include "keypad.h"
-//#include "globals.h"
 
 unsigned int avg0, avg1, avg2, avg3; // averages
 
@@ -60,7 +59,6 @@ void vTaskADC(void *vParameters) {
       
     if (i >= 64) {
       i = 0;
-      //xSemaphoreGive(gateKeeper);
     }
     ADC0_PSSI_R |= 0x1;
     delay(5);
@@ -87,12 +85,7 @@ void vTaskADC(void *vParameters) {
     total3 -= values3[i];
     values3[i] = dist3;
     total3 += values3[i];
-    
-//    printInt(dist0, 24);
-//    printInt(dist1, 34);
-//    printInt(dist2, 44);
-//    printInt(dist3, 54);
-    
+ 
     i++;
     vTaskDelay(8);
   }
@@ -138,10 +131,6 @@ void vTaskADCAverage(void *vParameters) {
     avg1 = total1 / 64;
     avg2 = total2 / 64;
     avg3 = total3 / 64;
-//    printInt(LookupDistanceTable(avg0), 24);
-//    printInt(LookupDistanceTable(avg1), 34);
-//    printInt(LookupDistanceTable(avg2), 44);
-//    printInt(LookupDistanceTable(avg3), 54);
     vTaskDelay(500);
   }
 }

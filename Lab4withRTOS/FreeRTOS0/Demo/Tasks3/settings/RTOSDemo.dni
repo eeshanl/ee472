@@ -16,7 +16,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-637766131
+Checksum=892787265
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -25,7 +25,7 @@ Enabled=_ 0
 [CallStackLog]
 Enabled=0
 [LMIFTDI]
-LMIFTDIserialNo=06100040A
+LMIFTDIserialNo=06100042A
 LMIFTDIfoundProbes=
 [Stack]
 FillEnabled=0

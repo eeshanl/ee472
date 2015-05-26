@@ -25,6 +25,7 @@
 
 int currentKey;
 unsigned long ulPeriod;
+
 //sets up the PWM
 void PWMinit() {
   GPIO_PORTF_DEN_R |= 0x00000001;

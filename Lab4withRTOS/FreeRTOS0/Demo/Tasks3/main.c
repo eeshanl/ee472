@@ -252,9 +252,7 @@ int main() {
         Create the queue used by the OLED task.  Messages for display on the OLED
         are received via this queue. 
     */
-    
-    xOLEDQueue = xQueueCreate( mainOLED_QUEUE_SIZE, sizeof( xOLEDMessage ) );
-    
+   
 
     /* 
         Exclude some tasks if using the kickstart version to ensure we stay within
@@ -279,7 +277,6 @@ int main() {
     
     /* Start the tasks */
     
-    //xTaskCreate( vOLEDTask, ( signed portCHAR * ) "OLED", mainOLED_TASK_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 
     xTaskCreate(vTaskADC, "Task ADC", 100, NULL, 2, NULL);
     xTaskCreate(vTaskADCAverage, "Task Average", 100, NULL, 2, NULL);
@@ -287,7 +284,6 @@ int main() {
     xTaskCreate(vTaskSpeaker, "Task Control Motor", 100, NULL, 1, NULL);
     xTaskCreate(vTaskDisplay, "Task OLED Display", 100, NULL, 3, NULL);
     xTaskCreate(vPrintDistance, "Task Distance Please", 100, NULL, 2, NULL);
-    //xTaskCreate(vTask3, "Task 3", 100,NULL, 3,NULL);
     
     /* 
       Configure the high frequency interrupt used to measure the interrupt
@@ -323,92 +319,10 @@ void InitializeHardware() {
   PWMinit();
   PORTD_init();
   prvSetupHardware();
-   speakerInit();
+  speakerInit();
 }
 
 
-
-/*
-  three dummy tasks
-*/
-
-void vTask3(void *vParameters)
-{
-  xOLEDMessage xMessage;
-   
-  volatile unsigned long ul;  
-  const char *T1Text = "Task 3 is running\n\r";
-  
-  xMessage.pcMessage = "Bon Jour, Task 3";
-  
-  while(1)
-  {
-      // Send the message to the OLED gatekeeper for display. 
-      xQueueSend( xOLEDQueue, &xMessage, 0 );
-    
-      vTaskDelay(2000);
-  }
-}
-
-/*
-  the OLED Task
-*/
-
-void vOLEDTask( void *pvParameters )
-{
-    xOLEDMessage xMessage;
-    unsigned portLONG ulY, ulMaxY;
-    static portCHAR cMessage[ mainMAX_MSG_LEN ];
-    extern volatile unsigned portLONG ulMaxJitter;
-    unsigned portBASE_TYPE uxUnusedStackOnEntry;
-    const unsigned portCHAR *pucImage;
-
-// Functions to access the OLED. 
-
-    void ( *vOLEDInit )( unsigned portLONG ) = NULL;
-    void ( *vOLEDStringDraw )( const portCHAR *, unsigned portLONG, unsigned portLONG, unsigned portCHAR ) = NULL;
-    void ( *vOLEDImageDraw )( const unsigned portCHAR *, unsigned portLONG, unsigned portLONG, unsigned portLONG, unsigned portLONG ) = NULL;
-    void ( *vOLEDClear )( void ) = NULL;
-  
-  
-    vOLEDInit = RIT128x96x4Init;
-    vOLEDStringDraw = RIT128x96x4StringDraw;
-    vOLEDImageDraw = RIT128x96x4ImageDraw;
-    vOLEDClear = RIT128x96x4Clear;
-    ulMaxY = mainMAX_ROWS_96;
-    pucImage = pucBasicBitmap;
-              
-// Just for demo purposes.
-    uxUnusedStackOnEntry = uxTaskGetStackHighWaterMark( NULL );
-  
-    ulY = ulMaxY;
-    
-    /* Initialise the OLED  */
-    vOLEDInit( ulSSI_FREQUENCY );	
-    
-    while( 1 )
-    {
-      // Wait for a message to arrive that requires displaying.
-      
-      xQueueReceive( xOLEDQueue, &xMessage, portMAX_DELAY );
-  
-      // Write the message on the next available row. 
-      
-      ulY += mainCHARACTER_HEIGHT;
-      if( ulY >= ulMaxY )
-      {
-          ulY = mainCHARACTER_HEIGHT;
-          vOLEDClear();
-      }
-  
-      // Display the message  
-                      
-      sprintf( cMessage, "%s", xMessage.pcMessage);
-      
-      vOLEDStringDraw( cMessage, 0, ulY, mainFULL_SCALE );
-      
-  }
-}
 /*-----------------------------------------------------------*/
 
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed portCHAR *pcTaskName )

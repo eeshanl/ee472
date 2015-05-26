@@ -48,7 +48,7 @@ int fresh_key(){
 //post: returns an int value of the key being pressed
 int keymaster() {
   while (is_a_key()) { //checks for valid key
-    if (getDebounce()) { //checks if the same key is being pressed for 100 miliseconds
+    if (debounce) { //checks if the same key is being pressed for 100 miliseconds
       if (fresh_key()) { //if the key has not been pressed before
         return lastKey;
       }
