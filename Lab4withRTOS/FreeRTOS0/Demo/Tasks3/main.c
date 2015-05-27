@@ -256,12 +256,18 @@ int main() {
   #endif
   
   /* Start the tasks */
- 
+  //creates the task for ADC sensors
   xTaskCreate(vTaskADC, "Task ADC", 100, NULL, 2, NULL);
+  //creates the task that averages the ADC samples
   xTaskCreate(vTaskADCAverage, "Task Average", 100, NULL, 2, NULL);
+  //creates the task that controls the motor 
   xTaskCreate(vTaskControlMotor, "Task Control Motor", 100, NULL, 2, NULL);
+  //creates the task that controls the speaker
   xTaskCreate(vTaskSpeaker, "Task Control Motor", 100, NULL, 1, NULL);
+  //creates the task the displays to the OLED Display
   xTaskCreate(vTaskDisplay, "Task OLED Display", 100, NULL, 3, NULL);
+  //creates the task that prints the distance from the distance sensors on the 
+  //OLED Display
   xTaskCreate(vPrintDistance, "Task Distance Please", 100, NULL, 2, NULL);
   
   /*
@@ -282,6 +288,23 @@ int main() {
   return 0;
 }
 
+//function for initializing the LED on the board
+void LED_init() {
+  //sets the system clock
+  SYSCTL_RCGC2_R |= 0x00000020;
+  //delays for about 1/80th of a second
+  delay(100);
+  //LED is at pin 0
+  //sets the direction bit for LED to 1 so it can write
+  //which enables it to display the light
+  GPIO_PORTF_DIR_R |= 0x00000001;
+  //sets the alternate function select to 0 to turn it off
+  GPIO_PORTF_AFSEL_R &= 0x00000000;
+  //sets the Digital Enabler to 1
+  GPIO_PORTF_DEN_R |= 0x00000001;
+  //Sets the Data for PORT F to 1
+  GPIO_PORTF_DATA_R &= ~(0x00000001);
+}
 
 void InitializeHardware() {
   RIT128x96x4Init(1000000);
@@ -301,7 +324,27 @@ void InitializeHardware() {
   speakerInit();
 }
 
+// Toggles the LED on the board
+void LED_toggle() {
+  GPIO_PORTF_DATA_R ^= 0x00000001;
+}
 
+//our delay function
+void delay(unsigned long aValue) {
+  volatile unsigned long i = 0;
+  volatile unsigned int j = 0;
+  for (i = aValue; i > 0; i--) {
+    for (j = 0; j < 100; j++);
+    }
+  return;
+}
+
+
+
+
+//************************************************************//
+// FREE RTOS FUNCTIONS                                        //
+//                                                            //
 /*-----------------------------------------------------------*/
 
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed portCHAR *pcTaskName )
@@ -362,39 +405,4 @@ void vApplicationTickHook( void )
     ulTicksSinceLastDisplay = 0;
     
   }
-}
-
-
-
-//function for initializing the LED on the board
-void LED_init() {
-  //sets the system clock
-  SYSCTL_RCGC2_R |= 0x00000020;
-  //delays for about 1/80th of a second
-  delay(100);
-  //LED is at pin 0
-  //sets the direction bit for LED to 1 so it can write
-  //which enables it to display the light
-  GPIO_PORTF_DIR_R |= 0x00000001;
-  //sets the alternate function select to 0 to turn it off
-  GPIO_PORTF_AFSEL_R &= 0x00000000;
-  //sets the Digital Enabler to 1
-  GPIO_PORTF_DEN_R |= 0x00000001;
-  //Sets the Data for PORT F to 1
-  GPIO_PORTF_DATA_R &= ~(0x00000001);
-}
-
-// Toggles the LED on the board
-void LED_toggle() {
-  GPIO_PORTF_DATA_R ^= 0x00000001;
-}
-
-//our delay function
-void delay(unsigned long aValue) {
-  volatile unsigned long i = 0;
-  volatile unsigned int j = 0;
-  for (i = aValue; i > 0; i--) {
-    for (j = 0; j < 100; j++);
-    }
-  return;
 }
