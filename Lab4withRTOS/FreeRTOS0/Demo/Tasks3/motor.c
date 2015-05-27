@@ -237,10 +237,10 @@ void vTaskControlMotor(void *vParameters) {
 //same, but in our motor, the right wheel is faster 
 //than the left one when moving forward
 void goForward(){
-  if(!fast){
+  if(fast){//if the setting is on fast mode
     PWM_1_CMPA_R = 0x14FF;
     PWM_1_CMPB_R = 0xFFF;
-  }else{
+  }else{//if the setting is on slow mode
     PWM_1_CMPA_R = 0x14FF;
     PWM_1_CMPB_R = 0xFFF;
   }
@@ -250,10 +250,10 @@ void goForward(){
 //backward. Both of them are the same value to make
 //sure that the tank moves back in a straight line
 void goBackWard(){
-  if(!fast){
+  if(fast){//if the setting is on fast mode
     PWM_1_CMPA_R = 0xFFF;
     PWM_1_CMPB_R = 0xFFF;
-  }else{
+  }else{//if the setting is on slow mode
     PWM_1_CMPA_R = 0xFFF;
     PWM_1_CMPB_R = 0xFFF;
   }
@@ -265,10 +265,10 @@ void goBackWard(){
 void goUpLeft(){
   // PWM_1_LOAD_R = 0xFFFF;
   //CMP determines the speed of the motor
-  if(!fast){
+  if(fast){//if the setting is on fast mode
     PWM_1_CMPA_R = 0xFF;
     PWM_1_CMPB_R = 0xFFF;
-  }else{
+  }else{//if the setting is on slow mode
     PWM_1_CMPA_R = 0xFF;
     PWM_1_CMPB_R = 0xFFF;
   }
@@ -278,10 +278,10 @@ void goUpLeft(){
 //in the upLeft direction. To go slightly left, the right wheel is faster than
 //the left wheel and both wheels move backward. 
 void goBackLeft(){
-  if(!fast){
+  if(fast){//if the setting is on fast mode
     PWM_1_CMPA_R = 0xFF; //100101011
     PWM_1_CMPB_R = 0x1FFF;
-  }else{
+  }else{//if the setting is on slow mode
     PWM_1_CMPA_R = 0xFF; //100101011
     PWM_1_CMPB_R = 0x1FFF;
   }
@@ -291,10 +291,10 @@ void goBackLeft(){
 //in the upLeft direction. To go slightly right, the left wheel is faster than
 //the right wheel and both wheels move forward. 
 void goUpRight(){
-  if(!fast){
+  if(fast){ //if the setting is on fast mode
     PWM_1_CMPA_R = 0x1FFF;
     PWM_1_CMPB_R = 0xFF;
-  }else{
+  }else{ //if the setting is on slow mode
     PWM_1_CMPA_R = 0x1FFF;
     PWM_1_CMPB_R = 0xFF;
   }
@@ -304,10 +304,10 @@ void goUpRight(){
 //in the upLeft direction. To go slightly right, the left wheel is faster than
 //the right wheel and both wheels move backward. 
 void goBackRight(){
-  if(!fast){
+  if(fast){ //if the setting is on fast mode
     PWM_1_CMPA_R = 0x1FFF;
     PWM_1_CMPB_R = 0xFF;
-  }else{
+  }else{ //if the setting is on slow mode
     PWM_1_CMPA_R = 0x1FFF;
     PWM_1_CMPB_R = 0xFF;
   }
