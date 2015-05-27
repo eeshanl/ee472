@@ -174,43 +174,68 @@ void vTaskControlMotor(void *vParameters) {
       GPIO_PORTD_DATA_R |= 0x90; //10010000
       //now both wheels can move backward
       goBackWard();
-    } else if (currentKey == 3) { //if right is pressed
-      //
+    } else if (currentKey == 3) { //if left is pressed
+      //enable the stdby
       GPIO_PORTD_DATA_R &= 0x40;
+      //disable the stdby mode and enables the PD5 and PD7 
       GPIO_PORTD_DATA_R |= 0xA0; //10100000
+      //changes the CMPA of the right wheel to make it slower
+      //for a proper right turn
       PWM_1_CMPA_R = 0xFFFF;
-    } else if (currentKey == 4) {
+    } else if (currentKey == 4) { //if right is pressed
+      //enable the stdby mode
       GPIO_PORTD_DATA_R &= 0x40;
+      //disables the stdby mode, and enables the PD4 and PD5 bits
       GPIO_PORTD_DATA_R |= 0x18; // 00011000
+      //changes the CMPB of the left wheel to make it slower
+      //for a proper left turn 
       PWM_1_CMPB_R = 0xFFF;
-    } else if(currentKey == 6){ //upleft
+    } else if(currentKey == 6){ // if the upLeft key is pressed
+      //enable the stdby
       GPIO_PORTD_DATA_R &= 0x40;
-      GPIO_PORTD_DATA_R |= 0x28;
+      //changes the PD5 and PD3 TO 1 and disables stdby
+      GPIO_PORTD_DATA_R |= 0x28; 
+      //makes the wheels go in the UpLeft direction
       goUpLeft();
-    } else if(currentKey == 7){ //upRight
+    } else if(currentKey == 7){ // if the upRight key is pressed
+      //enable the stdby
       GPIO_PORTD_DATA_R &= 0x40;
+      //changes the PD5 and PD3 TO 1 and disables stdby
       GPIO_PORTD_DATA_R |= 0x28; //01101000
+      //makes the wheels go in the UpRight direction
       goUpRight();
-    } else if(currentKey == 8){
+    } else if(currentKey == 8){ //if the backleft key is pressed
+      //enable the stdby
       GPIO_PORTD_DATA_R &= 0x40;
+      //changes the PD7 and PD4 TO 1 and disables stdby
       GPIO_PORTD_DATA_R |= 0x90;
+      //makes the wheels go in the backLeft direction
       goBackLeft();
-    } else if(currentKey == 9){
+    } else if(currentKey == 9){//if the backRight key is pressed
+      //enable the stdby
       GPIO_PORTD_DATA_R &= 0x40;
+      //changes the PD7 and PD4 TO 1 and disables stdby
       GPIO_PORTD_DATA_R |= 0x90;
+      //makes the wheels go in the backRight direction
       goBackRight();
     } else {
+      //enable the stdby
       GPIO_PORTD_DATA_R &= 0x40;
+      //changes the PD3 and PD PD7 and PD5 and PD4 to 1
+      //so no motion occurs
       GPIO_PORTD_DATA_R |= 0xB8;
       //PWM_1_CMPA_R = 0xFFFF;
       //PWM_1_CMPB_R = 0xFFF;
     }
-    
+    //delays time between task
     vTaskDelay(20);
   }
 }
 
-//OK
+//changes the CMPA and CMPB for the wheels to move
+//forward. Ideally, both these values should be the 
+//same, but in our motor, the right wheel is faster 
+//than the left one when moving forward
 void goForward(){
   if(!fast){
     PWM_1_CMPA_R = 0x14FF;
@@ -221,7 +246,9 @@ void goForward(){
   }
 }
 
-//OK
+//changes the CMPA and CMPB for the wheels to move
+//backward. Both of them are the same value to make
+//sure that the tank moves back in a straight line
 void goBackWard(){
   if(!fast){
     PWM_1_CMPA_R = 0xFFF;
@@ -232,9 +259,9 @@ void goBackWard(){
   }
 }
 
-//OK
-//CMPA ==> RIGHT MOTOR
-//CMPB ==> LEFT MOTOR
+//changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
+//in the upLeft direction. To go slightly left, the right wheel is faster than
+//the left wheel and both wheels move forward. 
 void goUpLeft(){
   // PWM_1_LOAD_R = 0xFFFF;
   //CMP determines the speed of the motor
@@ -247,7 +274,9 @@ void goUpLeft(){
   }
 }
 
-//OK
+//changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
+//in the upLeft direction. To go slightly left, the right wheel is faster than
+//the left wheel and both wheels move backward. 
 void goBackLeft(){
   if(!fast){
     PWM_1_CMPA_R = 0xFF; //100101011
@@ -258,7 +287,9 @@ void goBackLeft(){
   }
 }
 
-// OK
+//changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
+//in the upLeft direction. To go slightly right, the left wheel is faster than
+//the right wheel and both wheels move forward. 
 void goUpRight(){
   if(!fast){
     PWM_1_CMPA_R = 0x1FFF;
@@ -269,7 +300,9 @@ void goUpRight(){
   }
 }
 
-// OK
+//changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
+//in the upLeft direction. To go slightly right, the left wheel is faster than
+//the right wheel and both wheels move backward. 
 void goBackRight(){
   if(!fast){
     PWM_1_CMPA_R = 0x1FFF;
@@ -280,45 +313,48 @@ void goBackRight(){
   }
 }
 
-
+//this initializes the speaker on the Stellaris board. 
+//Speaker is hooked up to PWM0 
 void speakerInit(){
+  //enable the speaker peripheral that is connected to PWM0 
   SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM);
   //Set GPIO Port: G Enabled
   SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
-  
-  
   //Tell Port G, Pin 1, to take input from PWM 0
   GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_1);
-  
-  //Set a 440 Hz frequency as u1Period
+  //Set a 4400 Hz frequency as u1Period
   ulPeriod = SysCtlClockGet() / (4440);
-  
   //Configure PWM0 in up-down count mode, no sync to clock
   PWMGenConfigure(PWM0_BASE, PWM_GEN_0,
   PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
-  
-  //Set u1Period (440 Hz) as the period of PWM0
+  //Set u1Period (4400 Hz) as the period of PWM0
   PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod);
-  
   //Set PWM0, output 1 to a duty cycle of 1/8
   PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, ulPeriod / 16);
-  
   //Activate PWM0
   PWMGenEnable(PWM0_BASE, PWM_GEN_0);
 }
 
-
+//Task that plays a sound that gets within a range of 900 - 1200 distance within the distance sensor
 void vTaskSpeaker(void *vParameters) {
   while(1) {
+    //if the state is 5 or 6, this implies that the motor is not in standby(as determined from the menu options)
     if((state == 5 || state == 6) && (dist0 > 900 || dist1 > 900 || dist2 > 900 || dist3 > 900)){
+      //Set u1Period (4400 Hz) as the period of PWM0
       PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod);
+      //Set the output of the speaker to true, so sound is heard
       PWMOutputState(PWM0_BASE, PWM_OUT_1_BIT, true);
+      //delay for 100 units, so sound can be heard 
       delay(100);
+      //Set u1Period (4400 Hz * 2) as the period of PWM0
       PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod*2);
       //delay(100);
     }else{
+      //if this is  not in the range of the sensor, set output to false
+      //so sound is not heard anymore
       PWMOutputState(PWM0_BASE, PWM_OUT_1_BIT, false);
     }
+    //delay task for 10 units
     vTaskDelay(10);
   }
 }
