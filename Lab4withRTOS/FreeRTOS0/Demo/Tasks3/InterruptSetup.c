@@ -13,21 +13,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/cpu.h"
 
-
-unsigned long int timer1 = 0xFFFFFFFF; // Timer 1. Used as a clock to time how long events are taking.
-unsigned long int randomSeed = 0xFFFFFFFF; // a value used as a random seed. Timer2 decrements this value.
 int debounce = 0; //
-
-// method to return the value of the timer1 global variable to be accecible in other files.
-unsigned long int getTimer1() {
-  return timer1;
-}
-
-// returns the value of the randomSeed global variable to be accecible in other files.
-// Using timer interrupts we change a value of randomSeed to act as a psuedo random number generator.
-unsigned long int getSeed() {
-  return randomSeed;
-}
 
 // Initializes GPIO Port E for interrupts for the direction keys
 void init_GPIOE(void){
@@ -106,9 +92,4 @@ void GPIOEventHandler(){
     debounce = 0;
   }
   
-}
-
-// getter method to return the debounce flag.
-int getDebounce() {
-  return debounce;
 }

@@ -1,4 +1,4 @@
-// header file containing prototypes of initialization functions
+// ADC header file containing prototypes to use the sensor
 
 #ifndef ADC_H
 #define ADC_H

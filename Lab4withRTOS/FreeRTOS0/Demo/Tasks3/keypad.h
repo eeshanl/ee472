@@ -1,4 +1,4 @@
-// header file containing prototypes of keypad functions
+// Keypad header file containing prototypes of keypad functions
 
 #ifndef KEYPAD_H
 #define KEYPAD_H

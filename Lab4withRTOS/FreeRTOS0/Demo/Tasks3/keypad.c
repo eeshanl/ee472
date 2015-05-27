@@ -13,8 +13,6 @@
 // global int that stores the value of the last key pressed
 // lastKey is initially set to 0, as no key is pressed in the beginning
 int lastKey = 0;
-int press = 0;
-
 
 //post: returns whether the current data bit in the GPIO ports
 //      corresponds to a key
@@ -28,7 +26,6 @@ int is_a_key() {
     return 0;
   }
 }
-
 
 //returns an int value that corresponds to a new instance of a key
 //press. The lastKey flag is used to help figure this out.
@@ -44,7 +41,6 @@ int fresh_key(){
   }
 }
 
-
 //post: returns an int value of the key being pressed
 int keymaster() {
   while (is_a_key()) { //checks for valid key
@@ -58,15 +54,18 @@ int keymaster() {
   return 0;
 }
 
-
-//post: returns an int value that corresponds to the value a key has been assigned
+//returns an int value that corresponds to one of the following values:
 //      the assignment is as follows:
 //      return value 1 ==> up
 //      return value 2 ==> down
 //      return value 3 ==> left
-//      return value 4==> right
+//      return value 4 ==> right
 //      return value 5 ==> select
-//      return value 0 ==> no key pressed
+//      return value 6 ==> upLeft
+//      return value 7 ==> upRight
+//      return value 8 ==> backLeft
+//      return value 9 ==> backRight
+//      return value 0 ==> no key pressed or invalid presses
 int getKey() {
   // sets the keys to their ports on the board
   int up = ~GPIO_PORTE_DATA_R & 0x1;
@@ -109,19 +108,19 @@ int getKey() {
 
 //post: initializes the keys on the board to their repective ports on the board
 void key_init() {
-  SYSCTL_RCGC2_R |= 0x00000010;
+  SYSCTL_RCGC2_R |= 0x00000010; // enables port E
   delay(100);
   
-  GPIO_PORTE_AFSEL_R &= 0x00000000;
+  GPIO_PORTE_AFSEL_R &= 0x0; // turns off alternate functions for port E
   
-  GPIO_PORTE_DEN_R |= 0xF;
-  GPIO_PORTE_PUR_R |= 0xF;
+  GPIO_PORTE_DEN_R |= 0xF; // turns on digital enablers for buttons in port E
+  GPIO_PORTE_PUR_R |= 0xF; // turns on the pull up registers in port E
   
-  SYSCTL_RCGC2_R |= 0x00000020;
+  SYSCTL_RCGC2_R |= 0x20; // enables port F
   delay(100);
   
-  GPIO_PORTF_AFSEL_R &= 0x00000000;
+  GPIO_PORTF_AFSEL_R &= 0x0; // turns off alternate functions for port F
   
-  GPIO_PORTF_DEN_R |= 0x00000002;
-  GPIO_PORTF_PUR_R |= 0x2;
+  GPIO_PORTF_DEN_R |= 0x2; // turns on digital enablers for buttons in port F
+  GPIO_PORTF_PUR_R |= 0x2; // turns on the pull up registers in port F
 }

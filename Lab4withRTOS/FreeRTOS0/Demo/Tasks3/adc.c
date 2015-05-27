@@ -1,3 +1,5 @@
+// Contains all functions needed for the ADC's used by the distance sensors
+
 #include "adc.h"
 #include "main.h"
 
@@ -15,9 +17,10 @@
 
 #include "keypad.h"
 
+// average values every half of a second
 unsigned int avg0, avg1, avg2, avg3; // averages
 
-// stores 64 values for avg
+// stores 64 instantaneous values for averaging
 unsigned int values0[64];
 unsigned int values1[64];
 unsigned int values2[64];
@@ -34,18 +37,17 @@ unsigned int total3 = 0;
 
 // initializes the ADC so that the sensor can be used to recieve distances
 void ADCInit() {
-  // enables ADC0
   SYSCTL_RCGC0_R = 0x0;
   delay(100);
-  SYSCTL_RCGC0_R |= 0x10000;
-  //  ADC_SSCTL0_R |= 0x2;
+  SYSCTL_RCGC0_R |= 0x10000; // enables ADC0
   delay(100);
-  ADC0_ACTSS_R = 0xF;
-  ADC_SSMUX0_R |= (0x0 | 0x10 | 0x200 | 0x3000);
-  
-  ADC_SAC_R = 0x6;
+  ADC0_ACTSS_R = 0xF; // enables the SS0
+  ADC_SSMUX0_R |= (0x0 | 0x10 | 0x200 | 0x3000); // set control for each mux
+  ADC_SAC_R = 0x6; // set the oversampling to 64 per sample
 }
 
+// Task acquires the instantaneous values from each of the
+// distance sensors and accumulates each one for their respective total
 void vTaskADC(void *vParameters) {
   
   for (int i = 0; i < 64; i++) {
@@ -91,8 +93,7 @@ void vTaskADC(void *vParameters) {
   }
 }
 
-// A method used to debug our code. We pass in the distance value read from the sensor and print it
-// out to the OLED screen
+// Pass in an integer and print out to the OLED screen
 void printInt(int dist, int x, int y){
   int value = dist;
   char myData[5];
@@ -110,6 +111,9 @@ void printInt(int dist, int x, int y){
   RIT128x96x4StringDraw(myData, x, y, 15);
 }
 
+// Converts the digital value to millimeters. Decided to use an equation
+// instead of a lookup table because we didn't want to allocate memory to
+// a table of just values. The equation is also not that complex.
 unsigned short int LookupDistanceTable(unsigned short int d) {
   int dis = d << 6;
   if (dis <= 0x2222) {
@@ -124,9 +128,11 @@ unsigned short int LookupDistanceTable(unsigned short int d) {
   }
 }
 
+// Gets the average of approximately 4096 values every half a second.
+// Chose to get average every half of a second because a lot can happen
+// between that interval and a shorter interval would be more safe
 void vTaskADCAverage(void *vParameters) {
   while(1) {
-    LED_toggle();
     avg0 = total0 / 64;
     avg1 = total1 / 64;
     avg2 = total2 / 64;
