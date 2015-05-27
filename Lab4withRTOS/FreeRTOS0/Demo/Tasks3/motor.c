@@ -1,3 +1,5 @@
+// Functions used to drive the motor as well as the speaker
+
 #include "adc.h"
 #include "main.h"
 

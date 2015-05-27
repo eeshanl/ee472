@@ -1,3 +1,5 @@
+// Prototypes for the display functions
+
 #ifndef DISPLAY_H
 #define DISPLAY_H
 

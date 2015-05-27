@@ -1,98 +1,9 @@
-/*
-FreeRTOS V7.0.1 - Copyright (C) 2011 Real Time Engineers Ltd.
 
 
-***************************************************************************
-*                                                                       *
-*    FreeRTOS tutorial books are available in pdf and paperback.        *
-*    Complete, revised, and edited pdf reference manuals are also       *
-*    available.                                                         *
-*                                                                       *
-*    Purchasing FreeRTOS documentation will not only help you, by       *
-*    ensuring you get running as quickly as possible and with an        *
-*    in-depth knowledge of how to use FreeRTOS, it will also help       *
-*    the FreeRTOS project to continue with its mission of providing     *
-*    professional grade, cross platform, de facto standard solutions    *
-*    for microcontrollers - completely free of charge!                  *
-*                                                                       *
-*    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
-*                                                                       *
-*    Thank you for using FreeRTOS, and thank you for your support!      *
-*                                                                       *
-***************************************************************************
-
-
-This file is part of the FreeRTOS distribution and has been modified to
-demonstrate three simple tasks running.
-
-FreeRTOS is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License (version 2) as published by the
-Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
->>>NOTE<<< The modification to the GPL is included to allow you to
-distribute a combined work that includes FreeRTOS without being obliged to
-provide the source code for proprietary components outside of the FreeRTOS
-kernel.  FreeRTOS is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-more details. You should have received a copy of the GNU General Public
-License and the FreeRTOS license exception along with FreeRTOS; if not it
-can be viewed here: http://www.freertos.org/a00114.html and also obtained
-by writing to Richard Barry, contact details for whom are available on the
-FreeRTOS WEB site.
-
-1 tab == 4 spaces!
-
-http://www.FreeRTOS.org - Documentation, latest information, license and
-contact details.
-
-http://www.SafeRTOS.com - A version that is certified for use in safety
-critical systems.
-
-http://www.OpenRTOS.com - Commercial support, development, porting,
-licensing and training services.
-*/
-
-
-/*
-* Creates all the application tasks, then starts the scheduler.  The WEB
-* documentation provides more details of the standard demo application tasks.
-* In addition to the standard demo tasks, the following tasks and tests are
-* defined and/or created within this file:
-*
-* "OLED" task - the OLED task is a 'gatekeeper' task.  It is the only task that
-* is permitted to access the display directly.  Other tasks wishing to write a
-* message to the OLED send the message on a queue to the OLED task instead of
-* accessing the OLED themselves.  The OLED task just blocks on the queue waiting
-* for messages - waking and displaying the messages as they arrive.
-*
-* "Check" hook -  This only executes every five seconds from the tick hook.
-* Its main function is to check that all the standard demo tasks are still
-* operational.  Should any unexpected behaviour within a demo task be discovered
-* the tick hook will write an error to the OLED (via the OLED task).  If all the
-* demo tasks are executing with their expected behaviour then the check task
-* writes PASS to the OLED (again via the OLED task), as described above.
-*
-* "uIP" task -  This is the task that handles the uIP stack.  All TCP/IP
-* processing is performed in this task.
-*/
-
-
-
-
-/*************************************************************************
-* Please ensure to read http://www.freertos.org/portlm3sx965.html
-* which provides information on configuring and running this demo for the
-* various Luminary Micro EKs.
-*************************************************************************/
-
-/* Set the following option to 1 to include the WEB server in the build.  By
-default the WEB server is excluded to keep the compiled code size under the 32K
-limit imposed by the KickStart version of the IAR compiler.  The graphics
-libraries take up a lot of ROM space, hence including the graphics libraries
-and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
+/***************************/
+// These includes provided by FreeRTOS
 
 //  set this value to non 0 to include the web server
-
 #define mainINCLUDE_WEB_SERVER		0
 
 
@@ -121,6 +32,10 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 #include "lcd_message.h"
 #include "bitmap.h"
 
+// These includes provided by FreeRTOS
+/***************************/
+
+
 
 /* Our includes */
 
@@ -139,6 +54,7 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 #include "motor.h"
 #include "display.h"
 
+/* Our includes */
 
 /*-----------------------------------------------------------*/
 
@@ -221,26 +137,24 @@ extern void vSetupHighFrequencyTimer( void );
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed portCHAR *pcTaskName );
 void vApplicationTickHook( void );
 
-/*
-three dummy tasks of different priorities that simply run, announce
-themselves, then sleep
-*/
-
-void vTask3(void *vParameters);
-
-/*************************************************************************
-* Please ensure to read http://www.freertos.org/portlm3sx965.html
-* which provides information on configuring and running this demo for the
-* various Luminary Micro EKs.
-*************************************************************************/
+/* The main function creates and intializes all necessary tasks used by the RoboTank system.
+ * This method initializes hardware, sets up the scheduler (provided by FreeRTOS),
+ * and creates tasks that we made.
+ *
+ * Our RoboTank system includes a user interface system, a sensor system, a motor control system,
+ * a speaker system, and a keypad system. The user can cycle through the UI main menu to choose from different modes
+ * and drive the RoboTank using the keypad directional buttons
+ */ 
 
 int main() {
   
+  // Initializes all necessary hardware for the system.
   InitializeHardware();
-  /*
-  Exclude some tasks if using the kickstart version to ensure we stay within
-  the 32K code size limit.
-  */
+
+  
+  
+  /**************************************/
+  // These includes provided by FreeRTOS
   
   #if mainINCLUDE_WEB_SERVER != 0
   {
@@ -255,7 +169,18 @@ int main() {
   }
   #endif
   
+  
+  
+  // These includes provided by FreeRTOS
+  /**************************************/
+  
+  
+  /* Our Tasks
+   * NOTE: The xTaskCreate function is provided by FreeRTOS, we use them to create our tasks that we made.
+   */
+  
   /* Start the tasks */
+  
   //creates the task for ADC sensors
   xTaskCreate(vTaskADC, "Task ADC", 100, NULL, 2, NULL);
   //creates the task that averages the ADC samples
@@ -269,6 +194,11 @@ int main() {
   //creates the task that prints the distance from the distance sensors on the 
   //OLED Display
   xTaskCreate(vPrintDistance, "Task Distance Please", 100, NULL, 2, NULL);
+  
+  
+    
+  /**************************************/
+  // These includes provided by FreeRTOS
   
   /*
   Configure the high frequency interrupt used to measure the interrupt
@@ -284,6 +214,9 @@ int main() {
   vTaskStartScheduler();
   
   /* Will only get here if there was insufficient memory to create the idle task. */
+  
+  // These includes provided by FreeRTOS
+  /**************************************/
   
   return 0;
 }
@@ -306,6 +239,7 @@ void LED_init() {
   GPIO_PORTF_DATA_R &= ~(0x00000001);
 }
 
+// This function initializes all hardware used by our system.
 void InitializeHardware() {
   RIT128x96x4Init(1000000);
   //Initializes the LED
@@ -318,9 +252,15 @@ void InitializeHardware() {
   init_GPIOE();
   //Initializes GPIO PORT F and enables its interrupts
   init_GPIOF();
+  // Initializes the PWM's used
   PWMinit();
+  // Initializes Port D to use for sending signals to the H-bridge
   PORTD_init();
+  
+  // This method is used by FreeRtos
   prvSetupHardware();
+  
+  // This initializes the speaker
   speakerInit();
 }
 
@@ -340,10 +280,8 @@ void delay(unsigned long aValue) {
 }
 
 
-
-
 //************************************************************//
-// FREE RTOS FUNCTIONS                                        //
+// FREE RTOS FUNCTIONS BELOW                                  //
 //                                                            //
 /*-----------------------------------------------------------*/
 

@@ -1,3 +1,6 @@
+// We created Interrupt Handlers for GPIO's on Ports E and F.
+// All others are provided by FreeRTOS
+
 #include "InterruptSetup.h"
 //*****************************************************************************
 //

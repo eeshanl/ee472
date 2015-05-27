@@ -1,3 +1,5 @@
+// Few prototypes for the LED functions and other initializations
+
 #ifndef MAIN_H
 #define MAIN_H
 

@@ -1,3 +1,4 @@
+// Prototypes for the motor control functions
 
 #ifndef MOTOR_H
 #define MOTOR_H
