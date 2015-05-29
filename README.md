@@ -6,4 +6,12 @@
 * Learned how to initialize and use peripherals
 * Created a DDR game on LCD Display
 
-## Lab3: Interrupts
+## Lab 3: Interrupts
+* Timer Interrupts
+* GPIO Interrupts
+
+## Lab 4: RoboTank w/FreeRTOS
+* Manual Mode done
+
+## Lab 5: RoboTank
+* Final Project
