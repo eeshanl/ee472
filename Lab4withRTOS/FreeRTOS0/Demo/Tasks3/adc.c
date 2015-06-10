@@ -137,6 +137,6 @@ void vTaskADCAverage(void *vParameters) {
     avg1 = total1 / 64;
     avg2 = total2 / 64;
     avg3 = total3 / 64;
-    vTaskDelay(500);
+    vTaskDelay(10);
   }
 }

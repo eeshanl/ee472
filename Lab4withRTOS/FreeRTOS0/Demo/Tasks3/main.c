@@ -53,6 +53,7 @@
 #include "InterruptSetup.h"
 #include "motor.h"
 #include "display.h"
+#include "uart.h"
 
 /* Our includes */
 
@@ -152,7 +153,6 @@ int main() {
   InitializeHardware();
 
   
-  
   /**************************************/
   // These includes provided by FreeRTOS
   
@@ -186,16 +186,19 @@ int main() {
   //creates the task that averages the ADC samples
   xTaskCreate(vTaskADCAverage, "Task Average", 100, NULL, 2, NULL);
   //creates the task that controls the motor 
-  xTaskCreate(vTaskControlMotor, "Task Control Motor", 100, NULL, 2, NULL);
+  xTaskCreate(vTaskControlMotor, "Task Control Motor", 100, NULL, 2, NULL); //3
+  xTaskCreate(vAutoMotor, "Task Auto Motor", 100, NULL, 3, NULL); // 5
+  xTaskCreate(vSemiMotor, "Task Semi-Motor", 100, NULL, 3, NULL); // 5
   //creates the task that controls the speaker
   xTaskCreate(vTaskSpeaker, "Task Control Motor", 100, NULL, 1, NULL);
   //creates the task the displays to the OLED Display
-  xTaskCreate(vTaskDisplay, "Task OLED Display", 100, NULL, 3, NULL);
+  xTaskCreate(vTaskDisplay, "Task OLED Display", 100, NULL, 3, NULL); // 4
   //creates the task that prints the distance from the distance sensors on the 
   //OLED Display
   xTaskCreate(vPrintDistance, "Task Distance Please", 100, NULL, 2, NULL);
-  
-  
+  // blinks LEDS
+  xTaskCreate(vBlinkLED, "Blink", 100, NULL, 2, NULL);
+
     
   /**************************************/
   // These includes provided by FreeRTOS
@@ -237,6 +240,7 @@ void LED_init() {
   GPIO_PORTF_DEN_R |= 0x00000001;
   //Sets the Data for PORT F to 1
   GPIO_PORTF_DATA_R &= ~(0x00000001);
+  
 }
 
 // This function initializes all hardware used by our system.
@@ -256,12 +260,14 @@ void InitializeHardware() {
   PWMinit();
   // Initializes Port D to use for sending signals to the H-bridge
   PORTD_init();
-  
+  PORTC_init();
   // This method is used by FreeRtos
   prvSetupHardware();
-  
   // This initializes the speaker
   speakerInit();
+  //Sets the UART port
+  uARTInit();
+
 }
 
 // Toggles the LED on the board
@@ -278,7 +284,6 @@ void delay(unsigned long aValue) {
     }
   return;
 }
-
 
 //************************************************************//
 // FREE RTOS FUNCTIONS BELOW                                  //

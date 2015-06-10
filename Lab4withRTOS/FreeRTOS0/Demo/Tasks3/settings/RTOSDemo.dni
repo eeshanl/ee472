@@ -16,7 +16,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-854636555
+Checksum=-1339305626
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -25,7 +25,7 @@ Enabled=_ 0
 [CallStackLog]
 Enabled=0
 [LMIFTDI]
-LMIFTDIserialNo=06100042A
+LMIFTDIserialNo=06100146A
 LMIFTDIfoundProbes=
 [Stack]
 FillEnabled=0
@@ -43,6 +43,11 @@ LMI_ResetMode=0x00000000
 ShowArgs=0
 [Disassembly]
 MixedMode=1
+[Disassemble mode]
+mode=1
+[Breakpoints]
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\E\Dev\FreeRTOS\WorkingCopy2\Demo\Common\Minimal\IntQueue.c}.363.2@1" 0 0 0 0 "" 0 ""
+Count=1
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -50,17 +55,12 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
+[Aliases]
+Count=0
+SuppressDialog=0
 [DriverProfiling]
 Enabled=0
 Mode=0
 Graph=0
 Symbiont=0
 Exclusions=
-[Disassemble mode]
-mode=1
-[Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\E\Dev\FreeRTOS\WorkingCopy2\Demo\Common\Minimal\IntQueue.c}.363.2@1" 0 0 0 0 "" 0 ""
-Count=1
-[Aliases]
-Count=0
-SuppressDialog=0

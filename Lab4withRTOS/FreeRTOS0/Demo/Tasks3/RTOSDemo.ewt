@@ -209,6 +209,9 @@
   <file>
     <name>$PROJ_DIR$\motor.c</name>
   </file>
+  <file>
+    <name>$PROJ_DIR$\uart.c</name>
+  </file>
 </project>
 
 

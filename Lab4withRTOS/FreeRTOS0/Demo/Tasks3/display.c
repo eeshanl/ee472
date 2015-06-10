@@ -4,6 +4,7 @@
 #include "motor.h"
 #include "keypad.h"
 #include "display.h"
+#include "uart.h"
 
 #include "inc/lm3s8962.h"
 #include "drivers/rit128x96x4.h"
@@ -23,6 +24,8 @@
 int state = 0; // indicates which state you are in, in the menu
 int pastKey = -1; // flag to see what the previous key press was
 int fast = 0; // flag to indicate whether the tank will be driving in fast or slow mode. Fast = 1, slow = 0
+int auton = 0;
+int ledState;
 
 // This method is the task that runs the User-Interface system for the RoboTank system on the OLED display.
 // It starts off with a screen asking to press select, then asks the user to press manual mode
@@ -32,7 +35,6 @@ void vTaskDisplay(void *vParameters) {
   while(1) {
     if (pastKey != currentKey) {
       pastKey = currentKey;
-      int newState;
       int prev = state;
       
       
@@ -47,16 +49,21 @@ void vTaskDisplay(void *vParameters) {
           RIT128x96x4Clear();
         }
       } else if (state == 2) {
-        if (currentKey == 1 || currentKey == 2) {
+        if (currentKey == 1) {
+          state = 7;
+        } else if (currentKey == 2) {
           state = 3;
         } else if (currentKey == 5) {
           state = 4;
         }
       } else if (state == 3) {
-        if (currentKey == 1 || currentKey == 2) {
+        if (currentKey == 1) {
           state = 2;
+        } else if (currentKey == 2) {
+          state = 7;
         } else if (currentKey == 5) {
           state = 5;
+          auton = 1;
           GPIO_PORTD_DATA_R = 0x40;
         }
       } else if (state == 4) {
@@ -68,103 +75,250 @@ void vTaskDisplay(void *vParameters) {
           fast = 0;
           state = 6;
           GPIO_PORTD_DATA_R = 0x40;
-        } else{
-          state = 4;
         }
       } else if (state == 5) {
         if (currentKey == 5) {
           state = 2;
+          auton = 0;
           GPIO_PORTD_DATA_R &= ~(0x40);
         }
       } else if(state == 6){
         if (currentKey == 5) {
           state = 2;
+          fast = 0;
           GPIO_PORTD_DATA_R &= ~(0x40);
         }
-      } else{
-        state = 5;
-      }
-      
-      /****************************/
-      
-      // indicates whether the current state is a new state or not
-      if(prev != state) {
-        newState = 1;
-      } else {
-        newState = 0;
+      } else if (state == 7) {
+        if (currentKey == 1) {
+          state = 3;
+        } else if (currentKey == 2) {
+          state = 2;
+        } else if (currentKey == 5) {
+          state = 8;
+        }
+      } else if (state == 8) {
+        if(currentKey == 1){
+          fast = 1;
+          auton = 3;
+          state = 9;
+          GPIO_PORTD_DATA_R = 0x40;
+        } else if(currentKey == 2){
+          fast = 0;
+          auton = 3;
+          state = 9;
+          GPIO_PORTD_DATA_R = 0x40;
+        }
+      } else if (state == 9) {
+        if (currentKey == 5) {
+          fast = 0;
+          auton = 0;
+          state = 2;
+        }
       }
       
       /****************************/
       // This if/else structure indicates what to print out to the OLED display
       // depending on what state it is in from the previous if/else statement.
-      if (newState) {
+      if (prev != state) {
         RIT128x96x4Clear();
         if (state == 1) {
-          RIT128x96x4Clear();
           RIT128x96x4StringDraw("ROBO TANK!\0", 40, 0, 15);
           RIT128x96x4StringDraw("Press, SEL to start \0", 10, 10, 15);
           RIT128x96x4StringDraw("Denny Ly\0", 10, 30, 15);
           RIT128x96x4StringDraw("Eeshan Londhe\0", 10, 40, 15);
           RIT128x96x4StringDraw("Ruchira Kulkarni\0", 10, 50, 15);
         } else if (state == 2) {
-          RIT128x96x4Clear();
           printState2Or3(40);
         } else if (state == 3) {
-          RIT128x96x4Clear();
           printState2Or3(60);
         } else if(state == 4){
-          RIT128x96x4Clear();
-          RIT128x96x4StringDraw("Press up for 1\0", 30, 0, 15);
-            RIT128x96x4StringDraw("1. Faster\0", 30, 34, 15);
-          RIT128x96x4StringDraw("2. Slower\0", 30, 44, 15);
-          RIT128x96x4StringDraw("Press down for 2\0", 30, 14, 15);
-          } else if (state == 6) {
-            RIT128x96x4Clear();
-            RIT128x96x4StringDraw("Manual Mode \0", 33, 0, 15);
-            printADCString();
-          } else if (state == 5) {
-            RIT128x96x4Clear();
-            RIT128x96x4StringDraw("Autonomous Mode\0", 23, 0, 15);
-            printADCString();
-          }
+          chooseSpeed();
+        } else if (state == 6) {
+          RIT128x96x4StringDraw("Manual Mode \0", 33, 0, 15);
+          printADCString();
+        } else if (state == 5) {
+          RIT128x96x4StringDraw("Autonomous Mode\0", 23, 0, 15);
+          printADCString();
+        } else if (state == 7) {
+          printState2Or3(80);
+        } else if (state == 8) {
+          chooseSpeed();
+        } else if (state == 9) {
+          RIT128x96x4StringDraw("Semi-Auto Mode\0", 26, 0, 15);
+          printADCString();
         }
-      
-      /****************************/
-      
       }
-      vTaskDelay(10); // delay of about 10 ms
     }
+    vTaskDelay(10); // delay of about 10 ms
   }
+}
   
-  // Prints to the OLED display the necessary strings for the menu where you can choose between
-  // manual and autonomous mode
-  void printState2Or3(int y) {
-    RIT128x96x4StringDraw("Mode Selection:\0", 25, 0, 15);
-    RIT128x96x4StringDraw("Press SEL to choose\0", 10, 10, 15);
-    RIT128x96x4StringDraw(">\0", 0, y, 15);
-    RIT128x96x4StringDraw("Manual Mode\0", 15, 40, 15);
-    RIT128x96x4StringDraw("Autonomous Mode\0", 15, 60, 15);
+// Prints to the OLED display the necessary strings for the menu where you can choose between
+// manual and autonomous mode
+void printState2Or3(int y) {
+  RIT128x96x4StringDraw("Mode Selection:\0", 25, 0, 15);
+  RIT128x96x4StringDraw("Press SEL to choose\0", 10, 10, 15);
+  RIT128x96x4StringDraw(">\0", 0, y, 15);
+  RIT128x96x4StringDraw("Manual Mode\0", 15, 40, 15);
+  RIT128x96x4StringDraw("Autonomous Mode\0", 15, 60, 15);
+  RIT128x96x4StringDraw("Semi-Auto Mode\0", 15, 80, 15);
+}
+
+// Prints to the OLED display the necessary string for the menu where the ADC distance values are being displayed
+void printADCString() {
+  RIT128x96x4StringDraw("ADC 0:\0", 30, 24, 15);
+  RIT128x96x4StringDraw("ADC 1:\0", 30, 34, 15);
+  RIT128x96x4StringDraw("ADC 2:\0", 30, 44, 15);
+  RIT128x96x4StringDraw("ADC 3:\0", 30, 54, 15);
+  RIT128x96x4StringDraw("Press SEL to exit\0", 15, 74, 15);
+}
+
+// Prints to the OLED display the necessary string for the menu where the ADC distance values are being displayed
+void chooseSpeed() {
+  RIT128x96x4StringDraw("Choose a speed\0", 27, 0, 15);
+  RIT128x96x4StringDraw("Press up for 1\0", 27, 20, 15);
+  RIT128x96x4StringDraw("Press down for 2\0", 22, 34, 15);
+  RIT128x96x4StringDraw("1. Faster\0", 40, 54, 15);
+  RIT128x96x4StringDraw("2. Slower\0", 40, 64, 15);
+
+}
+
+// This task is used to print the instantaneous distances to the OLED display.
+// Only want to print to the OLED display once autonomous/manual mode is initiated
+void vPrintDistance(void *vParameters) {
+  while(1) {
+    if (state == 6 || state == 5 || state == 9) { // autonomous/manual mode states
+      printInt(LookupDistanceTable(dist0), 70, 24);
+      printInt(LookupDistanceTable(dist1), 70, 34);
+      printInt(LookupDistanceTable(dist2), 70, 44);
+      printInt(LookupDistanceTable(dist3), 70, 54);
+    }
+    vTaskDelay(50); // delay of about 20 ms
   }
-  
-  // Prints to the OLED display the necessary string for the menu where the ADC distance values are being displayed
-  void printADCString() {
-    RIT128x96x4StringDraw("ADC 0:\0", 30, 24, 15);
-    RIT128x96x4StringDraw("ADC 1:\0", 30, 34, 15);
-    RIT128x96x4StringDraw("ADC 2:\0", 30, 44, 15);
-    RIT128x96x4StringDraw("ADC 3:\0", 30, 54, 15);
-    RIT128x96x4StringDraw("Press SEL to exit\0", 15, 74, 15);
-  }
-  
-  // This task is used to print the instantaneous distances to the OLED display.
-  // Only want to print to the OLED display once autonomous/manual mode is initiated
-  void vPrintDistance(void *vParameters) {
-    while(1) {
-      if (state == 6 || state == 5) { // autonomous/manual mode states
-        printInt(LookupDistanceTable(dist0), 70, 24);
-        printInt(LookupDistanceTable(dist1), 70, 34);
-        printInt(LookupDistanceTable(dist2), 70, 44);
-        printInt(LookupDistanceTable(dist3), 70, 54);
+}
+
+void vBlinkLED(void* vParameters) {
+  while(1) {
+    if (state != 6 && state != 5 && state != 9) { // autonomous/manual mode states
+      if (ledState == 0) {
+        GPIO_PORTC_DATA_R = 0x80; //1000 0000
+        ledState = 1;
+      } else if (ledState == 1) {
+        GPIO_PORTC_DATA_R = 0x40; //0100 0000
+        ledState = 2;
+      } else {
+        ledState = 0;
+        GPIO_PORTC_DATA_R = 0x20; //0010 0000
       }
-      vTaskDelay(50); // delay of about 50 ms
     }
+    vTaskDelay(1000); // delay of about 50 ms
   }
+}
+
+//void vTaskDisplay(void *vParameters) {
+//  while(1) {
+//    if (pastKey != currentKey) {
+//      pastKey = currentKey;
+//      int newState;
+//      int prev = state;
+//      
+//      
+//    /****************************/
+//    // This if/else structures controls what state to go into. The state
+//    // corresponds to what is being displayed on the OLED display.
+//    if (state == 0) {
+//      state = 1;
+//    } else if (state == 1) {
+//      if (currentKey == 5) {
+//        state = 2;
+//        RIT128x96x4Clear();
+//      }
+//    } else if (state == 2) {
+//      if (currentKey == 1 || currentKey == 2) {
+//        state = 3;
+//      } else if (currentKey == 5) {
+//        state = 4;
+//      }
+//    } else if (state == 3) {
+//      if (currentKey == 1 || currentKey == 2) {
+//        state = 2;
+//      } else if (currentKey == 5) {
+//        state = 5;
+//        auton = 1;
+//        GPIO_PORTD_DATA_R = 0x40;
+//      }
+//    } else if (state == 4) {
+//      if(currentKey == 1){
+//        fast = 1;
+//        state = 6;
+//        GPIO_PORTD_DATA_R = 0x40;
+//      } else if(currentKey == 2){
+//        fast = 0;
+//        state = 6;
+//        GPIO_PORTD_DATA_R = 0x40;
+//      } else{
+//        state = 4;
+//      }
+//    } else if (state == 5) {
+//      if (currentKey == 5) {
+//        state = 2;
+//        auton = 0;
+//        GPIO_PORTD_DATA_R &= ~(0x40);
+//      }
+//    } else if(state == 6){
+//      if (currentKey == 5) {
+//        state = 2;
+//        fast = 0;
+//        GPIO_PORTD_DATA_R &= ~(0x40);
+//      }
+//    }
+//    
+//    /****************************/
+//    // indicates whether the current state is a new state or not
+//    if(prev != state) {
+//      newState = 1;
+//    } else {
+//      newState = 0;
+//    }
+//    
+//    /****************************/
+//    // This if/else structure indicates what to print out to the OLED display
+//    // depending on what state it is in from the previous if/else statement.
+//    if (newState) {
+//      RIT128x96x4Clear();
+//      if (state == 1) {
+//        RIT128x96x4Clear();
+//        RIT128x96x4StringDraw("ROBO TANK!\0", 40, 0, 15);
+//        RIT128x96x4StringDraw("Press, SEL to start \0", 10, 10, 15);
+//        RIT128x96x4StringDraw("Denny Ly\0", 10, 30, 15);
+//        RIT128x96x4StringDraw("Eeshan Londhe\0", 10, 40, 15);
+//        RIT128x96x4StringDraw("Ruchira Kulkarni\0", 10, 50, 15);
+//      } else if (state == 2) {
+//        RIT128x96x4Clear();
+//        printState2Or3(40);
+//      } else if (state == 3) {
+//        RIT128x96x4Clear();
+//        printState2Or3(60);
+//      } else if(state == 4){
+//        RIT128x96x4Clear();
+//        RIT128x96x4StringDraw("Press up for 1\0", 30, 0, 15);
+//          RIT128x96x4StringDraw("1. Faster\0", 30, 34, 15);
+//        RIT128x96x4StringDraw("2. Slower\0", 30, 44, 15);
+//        RIT128x96x4StringDraw("Press down for 2\0", 30, 14, 15);
+//        } else if (state == 6) {
+//          RIT128x96x4Clear();
+//          RIT128x96x4StringDraw("Manual Mode \0", 33, 0, 15);
+//          printADCString();
+//        } else if (state == 5) {
+//          RIT128x96x4Clear();
+//          RIT128x96x4StringDraw("Autonomous Mode\0", 23, 0, 15);
+//          printADCString();
+//        }
+//      }
+//    
+//    /****************************/
+//      
+//    }
+//    vTaskDelay(10); // delay of about 10 ms
+//  }
+//}

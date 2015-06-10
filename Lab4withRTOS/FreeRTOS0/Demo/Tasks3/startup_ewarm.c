@@ -2,6 +2,7 @@
 // All others are provided by FreeRTOS
 
 #include "InterruptSetup.h"
+#include "uart.h"
 //*****************************************************************************
 //
 // startup_ewarm.c - Boot code for Stellaris.
@@ -122,7 +123,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     GPIOEventHandler, //IntDefaultHandler,                      // GPIO Port E
-    IntDefaultHandler,                      // UART0 Rx and Tx
+    UARTIntHandler, //UARTIntHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI Rx and Tx
     IntDefaultHandler,                      // I2C Master and Slave
