@@ -172,12 +172,23 @@ void PORTC_init(){
 //PD2 ==> BIN
 //PD6 ==> STDBY
 void vTaskControlMotor(void *vParameters) {
+  //the following commands for the controlling the tank through
+  // the blue tooth app "blueTerm"
+  //'w' pressed to go forward
+  //'s' pressed to go back
+  //'a' pressed to go left
+  //'d' pressed to go right
+  //'q' pressed to go upLeft
+  //'e' pressed to go upRight
+  //'z' pressed to go back left
+  //'x' pressed to go back right
+  //if any other character is pressed, the tank stops
   while(1) {
     //gets the currentKey pressed by the user
     currentKey = keymaster();
     if (state == 6) { // (!auton) {
       //if the up key is pressed, tank should move forward
-      if (currentKey == 1 || bluetoothSignal == 'w') {
+      if (currentKey == 1 || bluetoothSignal == 'w') { 
         goForward();
       } else if (currentKey == 2 || bluetoothSignal == 's') {//if down is pressed
         goBackWard();
@@ -216,25 +227,37 @@ void stopTank(){
   }
 }
 
+//Task that controls the motor actions of the tank when it is
+//set to autonomous mode
 void vAutoMotor(void *vParameters) {
+  // avg0 ==> value sampled by the front sensor
+  // avg1 ==> value sampled by the back sensor
+  // avg2 ==> value sampled by the front-left sensor
+  // avg3 ==> value sampled by the front-right sensor
   //true if the last move made by the motor was back,front,left or right
   while(1) {
-    if (state == 5) { // (auton) {
-      if (avg0 > 400) {
+    if (state == 5) { // state 5 represents the motor in autnomous mode
+      if (avg0 > 400) { //avg0 ==> the sensor in the front of the tank
+        //if the avg0 is less than 400 units, it beeps and indicates the 
+        //tank to do one of the following actions:
         if (avg1 > 400 && avg2 > 350 && avg3 > 350) {
-          //stopTank();
+          //if all other sensors are close as well, go left
           goLeft();
         } else if (avg2 > 350 && avg3 > 350) {
+          //if both left and right side are open, then turn to the side
+          //farther away from an obstacle
           if (avg2 > avg3) {
-            goLeft();
-          } else { // avg2 < avg3
+            //right side of tank is closer to obstacle than left
+            goLeft(); 
+          } else { // this implies that avg2 < avg3
+            //left side of tank is closer to obstacle than right
             goRight();
           }
-        } else if (avg2 > 350) {
+        } else if (avg2 > 350) { //if the left side is open
           goLeft();
-        } else if (avg3 > 350) {
+        } else if (avg3 > 350) { //if the right side is open 
           goRight();
-        } else { // goRIGHT
+        } else { 
           if (avg2 > avg3) {
             goLeft();
           } else { // avg2 < avg3
@@ -249,10 +272,14 @@ void vAutoMotor(void *vParameters) {
             goRight();
           }
         } else if (avg2 > 350) {
+          //if right sensor is close and left is clear
+          //then go upLeft
           goUpLeft();
         } else if (avg3 > 350) {
+          //if left sensor is close and right is clear
           goUpRight();
-        } else { // goRIGHT
+        } else { // By default if there is no obstruction
+        //the tank moves forward
           goForward();
         }
       }
