@@ -290,6 +290,8 @@ void vAutoMotor(void *vParameters) {
 }
 //ADC3 left          ADC2 Right
 
+//this task is responsible for controlling tank actions in semi-autonomous mode
+//if the tank is close to an obstacle
 void vSemiMotor(void *vParameters) {
   while(1) {
     if (state == 9) { // (!auton) {
