@@ -1,4 +1,7 @@
-
+/* main.c
+ *
+ * Controlls fully functional, blueetoth controlled, autonomous RoboTank.
+ */
 
 /***************************/
 // These includes provided by FreeRTOS
@@ -145,82 +148,84 @@ void vApplicationTickHook( void );
  * Our RoboTank system includes a user interface system, a sensor system, a motor control system,
  * a speaker system, and a keypad system. The user can cycle through the UI main menu to choose from different modes
  * and drive the RoboTank using the keypad directional buttons
- */ 
+ */
 
 int main() {
-  
+
   // Initializes all necessary hardware for the system.
   InitializeHardware();
 
-  
+
   /**************************************/
   // These includes provided by FreeRTOS
-  
+
   #if mainINCLUDE_WEB_SERVER != 0
   {
     /*
     Create the uIP task if running on a processor that includes a MAC and PHY.
     */
-    
+
     if( SysCtlPeripheralPresent( SYSCTL_PERIPH_ETH ) )
     {
       xTaskCreate( vuIP_Task, ( signed portCHAR * ) "uIP", mainBASIC_WEB_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY - 1, NULL );
     }
   }
   #endif
-  
-  
-  
+
+
+
   // These includes provided by FreeRTOS
   /**************************************/
-  
-  
+
+
   /* Our Tasks
    * NOTE: The xTaskCreate function is provided by FreeRTOS, we use them to create our tasks that we made.
    */
-  
+
   /* Start the tasks */
-  
+
   //creates the task for ADC sensors
   xTaskCreate(vTaskADC, "Task ADC", 100, NULL, 2, NULL);
   //creates the task that averages the ADC samples
   xTaskCreate(vTaskADCAverage, "Task Average", 100, NULL, 2, NULL);
-  //creates the task that controls the motor 
+  //creates the task that controls the motor via kepad/bluetooth
   xTaskCreate(vTaskControlMotor, "Task Control Motor", 100, NULL, 2, NULL); //3
+  //creates the task that does the autonomous motion of the tank
   xTaskCreate(vAutoMotor, "Task Auto Motor", 100, NULL, 3, NULL); // 5
+  //creates the task that controls the semi-autonomous mode for the tank
   xTaskCreate(vSemiMotor, "Task Semi-Motor", 100, NULL, 3, NULL); // 5
   //creates the task that controls the speaker
   xTaskCreate(vTaskSpeaker, "Task Control Motor", 100, NULL, 1, NULL);
   //creates the task the displays to the OLED Display
   xTaskCreate(vTaskDisplay, "Task OLED Display", 100, NULL, 3, NULL); // 4
-  //creates the task that prints the distance from the distance sensors on the 
+  //creates the task that prints the distance from the distance sensors on the
   //OLED Display
   xTaskCreate(vPrintDistance, "Task Distance Please", 100, NULL, 2, NULL);
   // blinks LEDS
   xTaskCreate(vBlinkLED, "Blink", 100, NULL, 2, NULL);
 
-    
+
   /**************************************/
   // These includes provided by FreeRTOS
-  
+
   /*
   Configure the high frequency interrupt used to measure the interrupt
   jitter time.
   */
-  
+
   vSetupHighFrequencyTimer();
-  
+
   /*
   Start the scheduler.
   */
-  
+
   vTaskStartScheduler();
-  
+
   /* Will only get here if there was insufficient memory to create the idle task. */
-  
+
   // These includes provided by FreeRTOS
   /**************************************/
-  
+
   return 0;
 }
 
@@ -240,7 +245,7 @@ void LED_init() {
   GPIO_PORTF_DEN_R |= 0x00000001;
   //Sets the Data for PORT F to 1
   GPIO_PORTF_DATA_R &= ~(0x00000001);
-  
+
 }
 
 // This function initializes all hardware used by our system.
@@ -294,7 +299,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed portCHAR *pcTask
 {
   ( void ) pxTask;
   ( void ) pcTaskName;
-  
+
   while( 1 );
 }
 
@@ -306,26 +311,26 @@ void prvSetupHardware( void )
   If running on Rev A2 silicon, turn the LDO voltage up to 2.75V.  This is
   a workaround to allow the PLL to operate reliably.
   */
-  
+
   if( DEVICE_IS_REVA2 )
   {
     SysCtlLDOSet( SYSCTL_LDO_2_75V );
   }
-  
+
   // Set the clocking to run from the PLL at 50 MHz
-  
+
   SysCtlClockSet( SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ );
-  
+
   /*
   Enable Port F for Ethernet LEDs
   LED0        Bit 3   Output
   LED1        Bit 2   Output
   */
-  
+
   SysCtlPeripheralEnable( SYSCTL_PERIPH_GPIOF );
   GPIODirModeSet( GPIO_PORTF_BASE, (GPIO_PIN_2 | GPIO_PIN_3), GPIO_DIR_MODE_HW );
   GPIOPadConfigSet( GPIO_PORTF_BASE, (GPIO_PIN_2 | GPIO_PIN_3 ), GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD );
-  
+
 }
 
 
@@ -336,16 +341,16 @@ void vApplicationTickHook( void )
   static xOLEDMessage xMessage = { "PASS" };
   static unsigned portLONG ulTicksSinceLastDisplay = 0;
   portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-  
+
   /*
   Called from every tick interrupt.  Have enough ticks passed to make it
   time to perform our health status check again?
   */
-  
+
   ulTicksSinceLastDisplay++;
   if( ulTicksSinceLastDisplay >= mainCHECK_DELAY )
   {
     ulTicksSinceLastDisplay = 0;
-    
+
   }
 }

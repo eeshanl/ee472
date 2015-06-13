@@ -26,8 +26,8 @@
 #include "display.h"
 #include "uart.h"
 
-int currentKey;
-unsigned long ulPeriod;
+int currentKey; // flag to check current key pressed.
+unsigned long ulPeriod; // used for controlling the speaker
 int r = 0;
 
 //PWMinit sets up the Pulse Width Modulator
@@ -35,7 +35,7 @@ void PWMinit() {
   //Digitally enables PWM0
   //PWM0 Generator outputs to the PWM0 and PWM1
   GPIO_PORTF_DEN_R |= 0x00000000;
-  //Enables the PWM clock by writing a value of 0x0010.0000 
+  //Enables the PWM clock by writing a value of 0x0010.0000
   //to the RCGC0 register in the System Control module.
   SYSCTL_RCGC0_R |= 0x00100000;
   //delay for 50 units
@@ -78,10 +78,10 @@ void PWMinit() {
   PWM_0_CTL_R = 0x00000001;
   //PWM0 is enabled
   PWM_ENABLE_R = 0x00000003;
-  
+
   //The following sets up the PWM1 Generator
   //which outputs to the PWM2 and PWM3
-  
+
   //Enable the clock to the GPIO PORT B module via the
   //RCGC2 register in the System Control module.
   SYSCTL_RCGC2_R |= 0x2;
@@ -103,7 +103,7 @@ void PWMinit() {
   //to configure the PWM1 generator for countdown mode with immediate
   //updates to their parameters
   PWM_1_CTL_R = 0x00000000;
-  //PWM1 Generator A Control (Port B0) set to read mode 
+  //PWM1 Generator A Control (Port B0) set to read mode
   PWM_1_GENA_R = 0x0000008C;
   //PWM1 Generator B Control (Port B1) set to read mode
   PWM_1_GENB_R = 0x0000080C;
@@ -188,7 +188,7 @@ void vTaskControlMotor(void *vParameters) {
     currentKey = keymaster();
     if (state == 6) { // (!auton) {
       //if the up key is pressed, tank should move forward
-      if (currentKey == 1 || bluetoothSignal == 'w') { 
+      if (currentKey == 1 || bluetoothSignal == 'w') {
         goForward();
       } else if (currentKey == 2 || bluetoothSignal == 's') {//if down is pressed
         goBackWard();
@@ -238,7 +238,7 @@ void vAutoMotor(void *vParameters) {
   while(1) {
     if (state == 5) { // state 5 represents the motor in autnomous mode
       if (avg0 > 400) { //avg0 ==> the sensor in the front of the tank
-        //if the avg0 is less than 400 units, it beeps and indicates the 
+        //if the avg0 is less than 400 units, it beeps and indicates the
         //tank to do one of the following actions:
         if (avg1 > 400 && avg2 > 350 && avg3 > 350) {
           //if all other sensors are close as well, go left
@@ -248,16 +248,16 @@ void vAutoMotor(void *vParameters) {
           //farther away from an obstacle
           if (avg2 > avg3) {
             //right side of tank is closer to obstacle than left
-            goLeft(); 
+            goLeft();
           } else { // this implies that avg2 < avg3
             //left side of tank is closer to obstacle than right
             goRight();
           }
         } else if (avg2 > 350) { //if the left side is open
           goLeft();
-        } else if (avg3 > 350) { //if the right side is open 
+        } else if (avg3 > 350) { //if the right side is open
           goRight();
-        } else { 
+        } else {
           if (avg2 > avg3) {
             goLeft();
           } else { // avg2 < avg3
@@ -283,9 +283,9 @@ void vAutoMotor(void *vParameters) {
           goForward();
         }
       }
-    } 
+    }
     //delays time between task
-    vTaskDelay(10); 
+    vTaskDelay(10);
   }
 }
 //ADC3 left          ADC2 Right
@@ -369,12 +369,12 @@ void vSemiMotor(void *vParameters) {
 }
 
 //changes the CMPA and CMPB for the wheels to move
-//forward. Ideally, both these values should be the 
-//same, but in our motor, the right wheel is faster 
+//forward. Ideally, both these values should be the
+//same, but in our motor, the right wheel is faster
 //than the left one when moving forward
 void goForward(){
   GPIO_PORTC_DATA_R = 0x0;
-  //STDBY is enabled and PD3 is true and PD7 is false 
+  //STDBY is enabled and PD3 is true and PD7 is false
   GPIO_PORTD_DATA_R &= 0x40; //0100 0000
   //disables stdby and sets PD2 to 1 and PD4 to 0
   GPIO_PORTD_DATA_R |= 0x2C; //0010 1100
@@ -415,7 +415,7 @@ void goBackWard(){
 
 //changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
 //in the upLeft direction. To go slightly left, the right wheel is faster than
-//the left wheel and both wheels move forward. 
+//the left wheel and both wheels move forward.
 void goUpLeft(){
   if (state == 5 || state == 6) {
     GPIO_PORTC_DATA_R = 0x20;
@@ -423,7 +423,7 @@ void goUpLeft(){
   //enable the stdby
   GPIO_PORTD_DATA_R &= 0x40;
   //changes the PD5 and PD3 TO 1 and disables stdby
-  GPIO_PORTD_DATA_R |= 0x2C; 
+  GPIO_PORTD_DATA_R |= 0x2C;
   //makes the wheels go in the UpLeft direction
   if(auton){//if the setting is on fast mode
     PWM_1_CMPA_R = 0x7FF;
@@ -439,7 +439,7 @@ void goUpLeft(){
 
 //changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
 //in the upLeft direction. To go slightly left, the right wheel is faster than
-//the left wheel and both wheels move backward. 
+//the left wheel and both wheels move backward.
 void goBackLeft(){
   //enable the stdby
   if (state == 5 || state == 6) {
@@ -460,7 +460,7 @@ void goBackLeft(){
 
 //changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
 //in the upLeft direction. To go slightly right, the left wheel is faster than
-//the right wheel and both wheels move forward. 
+//the right wheel and both wheels move forward.
 void goUpRight(){
   if (state == 5 || state == 6) {
     GPIO_PORTC_DATA_R = 0x80; // 0010 0000
@@ -484,7 +484,7 @@ void goUpRight(){
 
 //changes the CMPA ==> Right motor and CMPB ==> left motor for the wheels to move
 //in the upLeft direction. To go slightly right, the left wheel is faster than
-//the right wheel and both wheels move backward. 
+//the right wheel and both wheels move backward.
 void goBackRight() {
   if (state == 5 || state == 6) {
     GPIO_PORTC_DATA_R = 0x80;
@@ -509,7 +509,7 @@ void goLeft(){
   }
   //enable the stdby
   GPIO_PORTD_DATA_R &= 0x40;
-  //disable the stdby mode and enables the PD2 and PD7 
+  //disable the stdby mode and enables the PD2 and PD7
   GPIO_PORTD_DATA_R |= 0x84; //1000 0100
   //changes the CMPA of the right wheel to make it slower
   //for a proper right turn
@@ -534,7 +534,7 @@ void goRight(){
   //disables the stdby mode, and enables the PD4 and PD5 bits
   GPIO_PORTD_DATA_R |= 0x18; // 0001 1000
   //changes the CMPB of the left wheel to make it slower
-  //for a proper left turn 
+  //for a proper left turn
   if(auton){
     PWM_1_CMPA_R = 0x2FFF;
     PWM_1_CMPB_R = 0x2FFF;
@@ -547,10 +547,10 @@ void goRight(){
   }
 }
 
-//this initializes the speaker on the Stellaris board. 
-//Speaker is hooked up to PWM0 
+//this initializes the speaker on the Stellaris board.
+//Speaker is hooked up to PWM0
 void speakerInit(){
-  //enable the speaker peripheral that is connected to PWM0 
+  //enable the speaker peripheral that is connected to PWM0
   SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM);
   //Set GPIO Port: G Enabled
   SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
@@ -574,14 +574,14 @@ void vTaskSpeaker(void *vParameters) {
   while(1) {
     //if the state is 5 or 6, this implies that the motor is not in standby(as determined from the menu options)
     if((state == 5 || state == 6) && (dist0 > 600 || dist1 > 600 || dist2 > 600 || dist3 > 600)){
-      
+
        GPIO_PORTF_DEN_R |= 0x00000001;
       //Set u1Period (4400 Hz) as the period of PWM0
 //      PWM_0_CMPA_R = 0x00012B;
        PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod);
       //Set the output of the speaker to true, so sound is heard
       PWMOutputState(PWM0_BASE, PWM_OUT_1_BIT, true);
-      //delay for 100 units, so sound can be heard 
+      //delay for 100 units, so sound can be heard
       delay(100);
       //Set u1Period (4400 Hz * 2) as the period of PWM0
       PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod*2);
