@@ -24,8 +24,8 @@
 int state = 0; // indicates which state you are in, in the menu
 int pastKey = -1; // flag to see what the previous key press was
 int fast = 0; // flag to indicate whether the tank will be driving in fast or slow mode. Fast = 1, slow = 0
-int auton = 0;
-int ledState;
+int auton = 0; // flag to inidcate whether the tank is in autonomous mode or not.
+int ledState; // flag to indicate which led to turn on
 
 // This method is the task that runs the User-Interface system for the RoboTank system on the OLED display.
 // It starts off with a screen asking to press select, then asks the user to press manual mode
@@ -197,6 +197,10 @@ void vPrintDistance(void *vParameters) {
   }
 }
 
+// This method is the task that controlls the LED's blinking that we added as an extra peripheral.
+// When the tank is stopped, the lights blink right to left.
+// When the tank is in motion, there are brake lights, as well as lights that indicate which direction the
+// tank is turning.
 void vBlinkLED(void* vParameters) {
   while(1) {
     if (state != 6 && state != 5 && state != 9) { // autonomous/manual mode states
