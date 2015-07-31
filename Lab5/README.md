@@ -12,28 +12,6 @@ In this lab, we learned how to incorporate bluetooth connectivity to make the Ro
 5. Iterate previous requirements specifications, design, and implementations of previous support for the  keypad, external GPIO interfaced LCD display, timers, ISRs, A/D sensors, and other infrastructure to meet the changes required for this lab.
 6. Test the new features and capabilities of the system
 
-## Group Members & Contributions
-
-#### Ruchira Kulkarni
-- Created README
-- Worked on motor control methods in autonomous mode
-- Worked on setting up the uart functionality
-- Wired the tank
-
-#### Eeshan Londhe
-- Commented code thoroughly
-- Worked on strategically developing the placement of the sensors used for autonomous and semi-autonomous mode
-- Worked with LED lights for signaling turns and brakes
-- helped with wiring the tank
-
-#### Denny Ly
-- Created flow diagrams and schematic
-- Worked on developing a strategy for motor movements in the autonomous mode of the tank
-- Worked on setting up the uart
-- Developed semi-autonomous mode
-
-<b>Overall, we distributed the work fairly evenly.</b>
-
 ## Hardware Setup
 We attached the H-bridge to the Stellaris board using 5 GPIO pins for control of the two motors on the RoboTank. Also, we gave the H-bridge two PWM signals to drive the two motors. The speaker was also initialized and connected to a PWM signal to produce sounds at various frequencies. See Lab Report for full Hardware Schematic.
 
